@@ -149,6 +149,84 @@ sub _croak { require Carp; goto &Carp::croak }
 
 1;
 
+__END__
+
+=pod
+
+=head1 Name
+
+HTML::Accessors - Generate HTML elements
+
+=head1 Version
+
+0.1.$Revision$
+
+=head1 Synopsis
+
+   use HTML::Accessors;
+
+   my $htag = HTML::Accessors->new( );
+
+   # Create an anchor element
+   $anchor = $htag->a( { href => 'http://...' }, 'This is a link' );
+
+=head1 Description
+
+=head1 Configuration and Environment
+
+=head2 new
+
+=head1 Subroutines/Methods
+
+=head2 AUTOLOAD
+
+=head1 Diagnostics
+
+None
+
+=head1 Dependencies
+
+=over 4
+
+=item L<Class::Accessor::Fast>
+
+=item L<HTML::GenerateUtil>
+
+=item L<HTML::Tagset>
+
+=item L<NEXT>
+
+=item L<Readonly>
+
+=back
+
+=head1 Incompatibilities
+
+There are no known incompatibilities in this module.
+
+=head1 Bugs and Limitations
+
+There are no known bugs in this module.
+Please report problems to the address below.
+Patches are welcome.
+
+=head1 Author
+
+Peter Flanigan, C<< <Support at RoxSoft.co.uk> >>
+
+=head1 License and Copyright
+
+Copyright (c) 2007 RoxSoft Limited. All rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself. See L<perlartistic>.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+=cut
+
 # Local Variables:
 # mode: perl
 # tab-width: 3
