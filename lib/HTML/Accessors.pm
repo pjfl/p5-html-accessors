@@ -174,8 +174,6 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Configuration and Environment
 
-=head2 new
-
 =head1 Subroutines/Methods
 
 =head2 AUTOLOAD

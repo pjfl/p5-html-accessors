@@ -15,7 +15,6 @@ my $requires = { 'perl'                  => q(5.8),
                  'HTML::Tagset'          => q(3.10),
                  'NEXT'                  => q(0.60),
                  'Readonly'              => q(1.03) };
-
 my $build    = Module::Build->new( create_makefile_pl => q(traditional),
                                    create_readme      => 1,
                                    create_packlist    => 0,
@@ -29,8 +28,4 @@ $build->create_build_script();
 # Local Variables:
 # mode: perl
 # tab-width: 3
-# End:use HTML::GenerateUtil qw(generate_tag :consts);
-use HTML::Tagset;
-use NEXT;
-use Readonly;
-
+# End:
