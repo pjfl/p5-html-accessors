@@ -13,6 +13,6 @@ use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
 BEGIN { use_ok q(HTML::Accessors) }
 
-my $ref = HTML::Accessors->new( { tempdir => q(/tmp) } );
+my $ref = HTML::Accessors->new();
 
 ok( $ref->a() =~ m{ <a .* > .* </a> }mx, q(anchor) );
