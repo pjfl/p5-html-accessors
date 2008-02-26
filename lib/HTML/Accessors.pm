@@ -61,7 +61,7 @@ sub radio_group {
    $rest[0] ||= $NUL;
    $args      = ref $rest[0] eq q(HASH) ? { %{ $rest[0] } } : { @rest };
    $cols      = $args->{columns} || q(999999);
-   $def       = defined $args->{default} ? $args->{default} : 0;
+   $def       = $args->{default} || 0;
    $labels    = $args->{labels}  || {};
    $name      = $args->{name}    || q(radio);
    $values    = $args->{values}  || [];
@@ -127,19 +127,20 @@ sub AUTOLOAD {
       return $me->NEXT::AUTOLOAD( @rest );
    }
 
-   $val = delete $args->{default} if (defined $args->{default});
+   $val ||= defined $args->{default} ? delete $args->{default} : $NUL;
 
 ## no critic
    if ($HTML::Tagset::emptyElement{ $elem }) {
 ## critic
       ($val, $mode) = (undef, GT_CLOSETAG);
    }
-   else { $val ||= $NUL }
 
    return generate_tag( $elem, $args, $val, $mode );
 }
 
-sub DESTROY { my ($me, @rest) = @_; return $me->NEXT::DESTROY( @rest ) }
+sub DESTROY {
+   my ($me, @rest) = @_; return $me->NEXT::DESTROY( @rest );
+}
 
 # Private methods
 
@@ -159,28 +160,150 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Version
 
-0.1.$Revision$
+0.1.$Rev$
 
 =head1 Synopsis
 
    use HTML::Accessors;
 
-   my $htag = HTML::Accessors->new( );
+   my $htag = HTML::Accessors->new();
 
    # Create an anchor element
    $anchor = $htag->a( { href => 'http://...' }, 'This is a link' );
 
 =head1 Description
 
+Uses L<HTML::GenerateUtil> to create an autoload method for each of
+the elements defined by L<HTML::Tagset>. The API was loosely taken
+from L<CGI>. Using the L<CGI> module is undesirable in a L<Catalyst>
+application (run from the development server) due go greediness issues
+over STDIN.
+
+The returned tags are XHTML 1.1 compliant.
+
 =head1 Configuration and Environment
+
+The constructor is inherited from L<Class::Accessor::Fast> and takes
+no options
 
 =head1 Subroutines/Methods
 
+=head2 escape_html
+
+Expose C<HTML::GenerateUtil::escape_html>
+
+=head2 popup_menu
+
+Returns the C<E<lt>selectE<gt>> element. The first option passed to
+C<popup_menu> is either a hash ref or a list of key/value pairs. The keys are:
+
+=over 3
+
+=item B<default>
+   Determines which of the values will be selected by default
+
+=item B<labels>
+   Display these labels in place of the values (but return the value
+   of the selected label). This is a hash ref with a key for each
+   element in the C<values> array
+
+=item B<values>
+   The key references an array ref whose values are used as the list of
+   options returned in the body of the C<E<lt>selectE<gt>> element.
+
+=back
+
+The rest of the keys and values are passed as attributes to the
+C<E<lt>selectE<gt>> element. For example:
+
+   $ref = { default => 1, name => q(my_field), values => [ 1, 2 ] };
+   $htag->popup_menu( $ref );
+
+would return
+
+   E<lt>select name="my_field"E<gt>
+   E<lt>option selected="selected"E<gt>1E<lt>/optionE<gt>
+   E<lt>optionE<gt>2E<lt>/optionE<gt>E<lt>/selectE<gt>
+
+=head2 radio_group
+
+Generates a list of radio input boxes with labels. Break elements can
+be inserted to create rows of a given number of columns when
+displayed. The first option passed to C<radio_group> is either a hash
+ref or a list of key/value pairs. The keys are:
+
+=over 3
+
+=item B<columns>
+   Integer number of columns to display the generated buttons in. If
+   zero then a list of radio boxes without breaks is generated
+
+=item B<default>
+   Determines which of the radio box will be selected by default
+
+=item B<labels>
+   Display these labels next to each button. This is a hash ref with a
+   key for each element in the C<values> array
+
+=item B<name>
+   The form name of the generated buttons
+
+=item B<onchange>
+   An optional Javascript reference. The JS will be executed each time
+   a different radio box is selected
+
+=item B<values>
+   The key references an array ref whose values are returned by the
+   radio boxes
+
+=back
+
+=head2 scrolling_list
+
+Calls C<popup_menu> with the C<multiple> argument set to
+C<multiple>. This has the effect of allowing multiple selections to
+be returned from the popup menu
+
 =head2 AUTOLOAD
+
+Uses L<HTML::Tagset> to check if the requested method is a known HTML
+element. If it is C<AUTOLOAD> uses L<HTML::GenerateUtil> to create the tag.
+
+If the first option is a hash ref then the keys and values are copied
+and passed to C<HTML::GenerateUtil::generate_tag> which uses them to
+set the attributes on the created element. The next option is treated
+as the element's body text and overrides the C<default> attribute which
+is passed and deleted from the options hash.
+
+If the requested element exists in the hard coded list of input
+elements, then the element is set to C<input> and the mapped value
+used as the type atrribute in the call to C<generate_tag>. For example;
+
+   $htag->textfield( { name => q(my_field) }, q(Some default text));
+
+would return
+
+   E<lt>input type="text" name="my_field"E<gt>Some default textE<lt>/inputE<gt>
+
+The list of input elements contains; button, checkbox, hidden,
+image_button, password_field, radio_button, submit, and textfield
+
+=head2 DESTROY
+
+Implement the C<DESTROY> method so that the C<AUTOLOAD> method doesn't get
+called instead. Redispatchs the call upstream.
+
+=head2 _carp
+
+Call C<Carp::carp>. Don't load L<Carp> if we don't have to
+
+=head2 _croak
+
+Call C<Carp::croak>. Don't load L<Carp> if we don't have to
 
 =head1 Diagnostics
 
-None
+C<Carp::carp> is called to issue a warning about undefined elements
 
 =head1 Dependencies
 
@@ -214,7 +337,7 @@ Peter Flanigan, C<< <Support at RoxSoft.co.uk> >>
 
 =head1 License and Copyright
 
-Copyright (c) 2007 RoxSoft Limited. All rights reserved.
+Copyright (c) 2008 Peter Flanigan. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself. See L<perlartistic>.
