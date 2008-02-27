@@ -181,12 +181,12 @@ over STDIN.
 
 The returned tags are XHTML 1.1 compliant.
 
-=head1 Configuration and Environment
+=head1 Subroutines/Methods
+
+=head2 new
 
 The constructor is inherited from L<Class::Accessor::Fast> and takes
 no options
-
-=head1 Subroutines/Methods
 
 =head2 escape_html
 
@@ -222,12 +222,13 @@ C<E<lt>selectE<gt>> element. For example:
 would return
 
    E<lt>select name="my_field"E<gt>
-   E<lt>option selected="selected"E<gt>1E<lt>/optionE<gt>
-   E<lt>optionE<gt>2E<lt>/optionE<gt>E<lt>/selectE<gt>
+      E<lt>option selected="selected"E<gt>1E<lt>/optionE<gt>
+      E<lt>optionE<gt>2E<lt>/optionE<gt>
+   E<lt>/selectE<gt>
 
 =head2 radio_group
 
-Generates a list of radio input boxes with labels. Break elements can
+Generates a list of radio input buttons with labels. Break elements can
 be inserted to create rows of a given number of columns when
 displayed. The first option passed to C<radio_group> is either a hash
 ref or a list of key/value pairs. The keys are:
@@ -236,7 +237,7 @@ ref or a list of key/value pairs. The keys are:
 
 =item B<columns>
    Integer number of columns to display the generated buttons in. If
-   zero then a list of radio boxes without breaks is generated
+   zero then a list of radio buttons without breaks is generated
 
 =item B<default>
    Determines which of the radio box will be selected by default
@@ -250,13 +251,25 @@ ref or a list of key/value pairs. The keys are:
 
 =item B<onchange>
    An optional Javascript reference. The JS will be executed each time
-   a different radio box is selected
+   a different radio button is selected
 
 =item B<values>
    The key references an array ref whose values are returned by the
-   radio boxes
+   radio buttons
 
 =back
+
+For example:
+
+   $ref = { columns => 2,
+            default => 1,
+            labels  => { 1 => q(Button One),
+                         2 => q(Button Two),
+                         3 => q(Button Three),
+                         4 => q(Button Four), },
+            name    => q(my_field),
+            values  => [ 1, 2, 3, 4 ] };
+   $htag->radio_group( $ref );
 
 =head2 scrolling_list
 
@@ -300,6 +313,10 @@ Call C<Carp::carp>. Don't load L<Carp> if we don't have to
 =head2 _croak
 
 Call C<Carp::croak>. Don't load L<Carp> if we don't have to
+
+=head1 Configuration and Environment
+
+None
 
 =head1 Diagnostics
 
