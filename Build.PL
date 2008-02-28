@@ -10,6 +10,7 @@ use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
 my $dist     = q(lib/HTML/Accessors.pm);
 my $requires = { 'perl'                  => q(5.8),
+                 'version'               => q(0.74),
                  'Class::Accessor::Fast' => q(0.31),
                  'HTML::GenerateUtil'    => q(1.08),
                  'HTML::Tagset'          => q(3.10),
