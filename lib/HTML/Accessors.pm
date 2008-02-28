@@ -28,7 +28,7 @@ sub escape_html {
 
 sub popup_menu {
    my ($me, @rest) = @_;
-   my ($args, $def, $labels, $opt_attr, $options, $val, $values);
+   my ($args, $def, $labels, $opt_attr, $options, $values);
 
    $rest[0] ||= $NUL;
    $args      = ref $rest[0] eq q(HASH) ? { %{ $rest[0] } } : { @rest };
@@ -36,7 +36,7 @@ sub popup_menu {
    $labels    = $args->{labels}  || {};   delete $args->{labels};
    $values    = $args->{values}  || [];   delete $args->{values};
 
-   for $val (@{ $values }) {
+   for my $val (@{ $values }) {
       $opt_attr = $val eq $def ? { selected => q(selected) } : {};
 
       if (exists $labels->{ $val }) {
@@ -56,7 +56,7 @@ sub popup_menu {
 sub radio_group {
    my ($me, @rest) = @_;
    my ($args, $cols, $def, $html, $i, $inp, $inp_attr);
-   my ($labels, $name, $val, $values);
+   my ($labels, $name, $values);
 
    $rest[0] ||= $NUL;
    $args      = ref $rest[0] eq q(HASH) ? { %{ $rest[0] } } : { @rest };
@@ -70,7 +70,7 @@ sub radio_group {
 
    $inp_attr->{onchange} = $args->{onchange} if ($args->{onchange});
 
-   for $val (@{ $values }) {
+   for my $val (@{ $values }) {
       $inp_attr->{value   } = $val;
       $inp_attr->{tabindex} = $i;
       $inp_attr->{checked } = q(checked)
@@ -219,7 +219,7 @@ C<E<lt>selectE<gt>> element. For example:
    $ref = { default => 1, name => q(my_field), values => [ 1, 2 ] };
    $htag->popup_menu( $ref );
 
-would return
+would return:
 
    E<lt>select name="my_field"E<gt>
       E<lt>option selected="selected"E<gt>1E<lt>/optionE<gt>
@@ -271,6 +271,23 @@ For example:
             values  => [ 1, 2, 3, 4 ] };
    $htag->radio_group( $ref );
 
+would return:
+
+   E<lt>label>
+      E<lt>input checked="checked" tabindex="1" value="1" name="my_field" type="radio" />Button One
+   E<lt>/label>
+   E<lt>label>
+      E<lt>input tabindex="2" value="2" name="my_field" type="radio" />Button Two
+   E<lt>/label>
+   E<lt>br />
+   E<lt>label>
+      E<lt>input tabindex="3" value="3" name="my_field" type="radio" />Button Three
+   E<lt>/label>
+   E<lt>label>
+      E<lt>input tabindex="4" value="4" name="my_field" type="radio" />Button Four
+   E<lt>/label>
+   E<lt>br />
+
 =head2 scrolling_list
 
 Calls C<popup_menu> with the C<multiple> argument set to
@@ -290,13 +307,13 @@ is passed and deleted from the options hash.
 
 If the requested element exists in the hard coded list of input
 elements, then the element is set to C<input> and the mapped value
-used as the type atrribute in the call to C<generate_tag>. For example;
+used as the type attribute in the call to C<generate_tag>. For example;
 
-   $htag->textfield( { name => q(my_field) }, q(Some default text));
+   $htag->textfield( { default => q(default value), name => q(my_field) } );
 
 would return
 
-   E<lt>input type="text" name="my_field"E<gt>Some default textE<lt>/inputE<gt>
+   E<lt>input value="default value" name="my_field" type="text" />
 
 The list of input elements contains; button, checkbox, hidden,
 image_button, password_field, radio_button, submit, and textfield
@@ -304,7 +321,7 @@ image_button, password_field, radio_button, submit, and textfield
 =head2 DESTROY
 
 Implement the C<DESTROY> method so that the C<AUTOLOAD> method doesn't get
-called instead. Redispatchs the call upstream.
+called instead. Re-dispatches the call upstream.
 
 =head2 _carp
 
