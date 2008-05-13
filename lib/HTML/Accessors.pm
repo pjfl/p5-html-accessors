@@ -200,16 +200,19 @@ C<popup_menu> is either a hash ref or a list of key/value pairs. The keys are:
 =over 3
 
 =item B<default>
-   Determines which of the values will be selected by default
+
+Determines which of the values will be selected by default
 
 =item B<labels>
-   Display these labels in place of the values (but return the value
-   of the selected label). This is a hash ref with a key for each
-   element in the C<values> array
+
+Display these labels in place of the values (but return the value
+of the selected label). This is a hash ref with a key for each
+element in the C<values> array
 
 =item B<values>
-   The key references an array ref whose values are used as the list of
-   options returned in the body of the C<E<lt>selectE<gt>> element.
+
+The key references an array ref whose values are used as the list of
+options returned in the body of the C<E<lt>selectE<gt>> element
 
 =back
 
@@ -221,10 +224,10 @@ C<E<lt>selectE<gt>> element. For example:
 
 would return:
 
-   E<lt>select name="my_field"E<gt>
-      E<lt>option selected="selected"E<gt>1E<lt>/optionE<gt>
-      E<lt>optionE<gt>2E<lt>/optionE<gt>
-   E<lt>/selectE<gt>
+   <select name="my_field">
+      <option selected="selected">1E</option>
+      <option>2E</option>
+   </select>
 
 =head2 radio_group
 
@@ -236,26 +239,32 @@ ref or a list of key/value pairs. The keys are:
 =over 3
 
 =item B<columns>
-   Integer number of columns to display the generated buttons in. If
-   zero then a list of radio buttons without breaks is generated
+
+Integer number of columns to display the generated buttons in. If
+zero then a list of radio buttons without breaks is generated
 
 =item B<default>
-   Determines which of the radio box will be selected by default
+
+Determines which of the radio box will be selected by default
 
 =item B<labels>
-   Display these labels next to each button. This is a hash ref with a
-   key for each element in the C<values> array
+
+Display these labels next to each button. This is a hash ref with a
+key for each element in the C<values> array
 
 =item B<name>
-   The form name of the generated buttons
+
+The form name of the generated buttons
 
 =item B<onchange>
-   An optional Javascript reference. The JS will be executed each time
-   a different radio button is selected
+
+An optional Javascript reference. The JS will be executed each time
+a different radio button is selected
 
 =item B<values>
-   The key references an array ref whose values are returned by the
-   radio buttons
+
+The key references an array ref whose values are returned by the
+radio buttons
 
 =back
 
@@ -273,20 +282,20 @@ For example:
 
 would return:
 
-   E<lt>label>
-      E<lt>input checked="checked" tabindex="1" value="1" name="my_field" type="radio" />Button One
-   E<lt>/label>
-   E<lt>label>
-      E<lt>input tabindex="2" value="2" name="my_field" type="radio" />Button Two
-   E<lt>/label>
-   E<lt>br />
-   E<lt>label>
-      E<lt>input tabindex="3" value="3" name="my_field" type="radio" />Button Three
-   E<lt>/label>
-   E<lt>label>
-      E<lt>input tabindex="4" value="4" name="my_field" type="radio" />Button Four
-   E<lt>/label>
-   E<lt>br />
+   <label>
+      <input checked="checked" tabindex="1" value="1" name="my_field" type="radio" />Button One
+   </label>
+   <label>
+      <input tabindex="2" value="2" name="my_field" type="radio" />Button Two
+   </label>
+   <br />
+   <label>
+      <input tabindex="3" value="3" name="my_field" type="radio" />Button Three
+   </label>
+   <label>
+      <input tabindex="4" value="4" name="my_field" type="radio" />Button Four
+   </label>
+   <br />
 
 =head2 scrolling_list
 
@@ -297,13 +306,13 @@ be returned from the popup menu
 =head2 AUTOLOAD
 
 Uses L<HTML::Tagset> to check if the requested method is a known HTML
-element. If it is C<AUTOLOAD> uses L<HTML::GenerateUtil> to create the tag.
+element. If it is C<AUTOLOAD> uses L<HTML::GenerateUtil> to create the tag
 
 If the first option is a hash ref then the keys and values are copied
 and passed to C<HTML::GenerateUtil::generate_tag> which uses them to
 set the attributes on the created element. The next option is treated
 as the element's body text and overrides the C<default> attribute which
-is passed and deleted from the options hash.
+is passed and deleted from the options hash
 
 If the requested element exists in the hard coded list of input
 elements, then the element is set to C<input> and the mapped value
@@ -313,7 +322,7 @@ used as the type attribute in the call to C<generate_tag>. For example;
 
 would return
 
-   E<lt>input value="default value" name="my_field" type="text" />
+   <input value="default value" name="my_field" type="text" />
 
 The list of input elements contains; button, checkbox, hidden,
 image_button, password_field, radio_button, submit, and textfield
@@ -321,7 +330,7 @@ image_button, password_field, radio_button, submit, and textfield
 =head2 DESTROY
 
 Implement the C<DESTROY> method so that the C<AUTOLOAD> method doesn't get
-called instead. Re-dispatches the call upstream.
+called instead. Re-dispatches the call upstream
 
 =head2 _carp
 
@@ -357,13 +366,13 @@ C<Carp::carp> is called to issue a warning about undefined elements
 
 =head1 Incompatibilities
 
-There are no known incompatibilities in this module.
+There are no known incompatibilities in this module
 
 =head1 Bugs and Limitations
 
 There are no known bugs in this module.
 Please report problems to the address below.
-Patches are welcome.
+Patches are welcome
 
 =head1 Author
 
