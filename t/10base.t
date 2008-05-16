@@ -15,7 +15,7 @@ if ($ENV{AUTOMATED_TESTING} and $OSNAME eq q(darwin)) {
    plan tests => 1; use_ok( q(Test::More) ); exit 0;
 }
 
-plan tests => 5;
+plan tests => 7;
 
 use_ok q(HTML::Accessors);
 
@@ -47,3 +47,14 @@ ok( $ref->radio_group( $args )
     =~ m{ \A <label> \s+ <input \s+ checked="checked" \s+ tabindex="1"
           \s+ value="1" \s+ name="my_field" \s+ type="radio" \s+
           />Button \s+ One</label> }mx, q(radio_group) );
+
+$ref = HTML::Accessors->new( content_type => q(text/html) );
+
+ok( $ref->textfield( { default => q(default value), name => q(my_field) } )
+    eq '<input value="default value" name="my_field" type="text">',
+    q(textfield-html) );
+
+ok( $ref->radio_group( $args )
+    =~ m{ \A <label> \s+ <input \s+ checked="checked" \s+ tabindex="1"
+          \s+ value="1" \s+ name="my_field" \s+ type="radio"
+          >Button \s+ One</label> }mx, q(radio_group-html) );

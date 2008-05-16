@@ -12,18 +12,32 @@ use Readonly;
 
 use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
-Readonly my $INP => { button         => q(button),
-                      checkbox       => q(checkbox),
-                      hidden         => q(hidden),
-                      image_button   => q(image),
-                      password_field => q(password),
-                      radio_button   => q(radio),
-                      submit         => q(submit),
-                      textfield      => q(text) };
-Readonly my $NUL => q();
+Readonly my $ATTRS => { content_type   => q(application/xhtml+xml) };
+Readonly my $INP   => { button         => q(button),
+                        checkbox       => q(checkbox),
+                        hidden         => q(hidden),
+                        image_button   => q(image),
+                        password_field => q(password),
+                        radio_button   => q(radio),
+                        submit         => q(submit),
+                        textfield      => q(text) };
+Readonly my $NUL   => q();
+
+__PACKAGE__->mk_accessors( keys %{ $ATTRS } );
+
+sub new {
+   my ($me, @rest) = @_;
+   my $self        = $me->_hash_merge( $ATTRS, $me->_arg_list( @rest ) );
+
+   return bless $self, ref $me || $me;
+}
 
 sub escape_html {
    my ($me, @rest) = @_; return HTML::GenerateUtil::escape_html( @rest );
+}
+
+sub is_xml {
+   return shift->content_type eq q(application/xhtml+xml) ? 1 : 0;
 }
 
 sub popup_menu {
@@ -31,7 +45,7 @@ sub popup_menu {
    my ($args, $def, $labels, $opt_attr, $options, $values);
 
    $rest[0] ||= $NUL;
-   $args      = ref $rest[0] eq q(HASH) ? { %{ $rest[0] } } : { @rest };
+   $args      = $me->_arg_list( @rest );
    $def       = $args->{default} || $NUL; delete $args->{default};
    $labels    = $args->{labels}  || {};   delete $args->{labels};
    $values    = $args->{values}  || [];   delete $args->{values};
@@ -56,16 +70,17 @@ sub popup_menu {
 sub radio_group {
    my ($me, @rest) = @_;
    my ($args, $cols, $def, $html, $i, $inp, $inp_attr);
-   my ($labels, $name, $values);
+   my ($labels, $mode, $name, $values);
 
    $rest[0] ||= $NUL;
-   $args      = ref $rest[0] eq q(HASH) ? { %{ $rest[0] } } : { @rest };
+   $args      = $me->_arg_list( @rest );
    $cols      = $args->{columns} || q(999999);
    $def       = $args->{default} || 0;
    $labels    = $args->{labels}  || {};
    $name      = $args->{name}    || q(radio);
    $values    = $args->{values}  || [];
    $inp_attr  = { name => $name, type => q(radio) };
+   $mode      = $me->is_xml ? GT_CLOSETAG : 0;
    $i         = 1;
 
    $inp_attr->{onchange} = $args->{onchange} if ($args->{onchange});
@@ -77,12 +92,12 @@ sub radio_group {
          if ($def !~ m{ \d+ }mx && $val eq $def);
       $inp_attr->{checked } = q(checked)
          if ($def =~ m{ \d+ }mx && $val == $def);
-      $inp   = generate_tag( q(input), $inp_attr, undef, GT_CLOSETAG );
+      $inp   = generate_tag( q(input), $inp_attr, undef, $mode );
       $inp  .= $labels->{ $val } || $val;
       $html .= generate_tag( q(label), undef, "\n".$inp, GT_ADDNEWLINE );
 
       if ($cols && $i % $cols == 0) {
-         $html .= generate_tag( q(br), undef, undef, GT_CLOSETAG );
+         $html .= generate_tag( q(br), undef, undef, $mode );
       }
 
       delete $inp_attr->{checked};
@@ -93,10 +108,9 @@ sub radio_group {
 }
 
 sub scrolling_list {
-   my ($me, $args) = @_;
+   my ($me, @rest) = @_; my $args = $me->_arg_list( @rest );
 
    $args->{multiple} = q(multiple);
-
    return $me->popup_menu( $args );
 }
 
@@ -132,7 +146,7 @@ sub AUTOLOAD {
 ## no critic
    if ($HTML::Tagset::emptyElement{ $elem }) {
 ## critic
-      ($val, $mode) = (undef, GT_CLOSETAG);
+      $val = undef; $mode = $me->is_xml ? GT_CLOSETAG : 0;
    }
 
    return generate_tag( $elem, $args, $val, $mode );
@@ -144,9 +158,19 @@ sub DESTROY {
 
 # Private methods
 
+sub _arg_list {
+   my ($me, @rest) = @_;
+
+   return $rest[0] && ref $rest[0] eq q(HASH) ? { %{ $rest[0] } } : { @rest };
+}
+
 sub _carp { require Carp; goto &Carp::carp }
 
 sub _croak { require Carp; goto &Carp::croak }
+
+sub _hash_merge {
+   my ($me, $l, $r) = @_; return { %{ $l }, %{ $r || {} } };
+}
 
 1;
 
@@ -179,18 +203,31 @@ from L<CGI>. Using the L<CGI> module is undesirable in a L<Catalyst>
 application (run from the development server) due go greediness issues
 over STDIN.
 
-The returned tags are XHTML 1.1 compliant.
+The returned tags are either XHTML 1.1 or HTML 4.01 compliant.
 
 =head1 Subroutines/Methods
 
 =head2 new
 
-The constructor is inherited from L<Class::Accessor::Fast> and takes
-no options
+The constructor defines one attribute:
+
+=over 3
+
+=item content_type
+
+Defaults to I<application/xhtml+xml> which causes the generated tags
+to conform to the XHTML standard. Setting it to I<text/html> will
+generate HTML compatible tags instead
+
+=back
 
 =head2 escape_html
 
 Expose C<HTML::GenerateUtil::escape_html>
+
+=head2 is_xml
+
+Returns true if the returned tags will be XHTML
 
 =head2 popup_menu
 
@@ -225,8 +262,8 @@ C<E<lt>selectE<gt>> element. For example:
 would return:
 
    <select name="my_field">
-      <option selected="selected">1E</option>
-      <option>2E</option>
+      <option selected="selected">1E<lt>/option>
+      <option>2E<lt>/option>
    </select>
 
 =head2 radio_group
@@ -332,6 +369,13 @@ image_button, password_field, radio_button, submit, and textfield
 Implement the C<DESTROY> method so that the C<AUTOLOAD> method doesn't get
 called instead. Re-dispatches the call upstream
 
+=head2 _arg_list
+
+Returns a hash ref containing the passed parameter list. Enables
+methods to be called with either a list or a hash ref as it's input
+parameters. Makes copies as it goes so that you can change the contents
+without altering the parameters if they were passed by reference
+
 =head2 _carp
 
 Call C<Carp::carp>. Don't load L<Carp> if we don't have to
@@ -339,6 +383,10 @@ Call C<Carp::carp>. Don't load L<Carp> if we don't have to
 =head2 _croak
 
 Call C<Carp::croak>. Don't load L<Carp> if we don't have to
+
+=head2 _hash_merge
+
+Simplistic merging of two hashes
 
 =head1 Configuration and Environment
 
