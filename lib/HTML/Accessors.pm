@@ -208,11 +208,9 @@ over STDIN.
 
 The returned tags are either XHTML 1.1 or HTML 4.01 compliant.
 
-=head1 Subroutines/Methods
+=head1 Configuration and Environment
 
-=head2 new
-
-The constructor defines one attribute:
+The constructor defines accessors and mutators for one attribute:
 
 =over 3
 
@@ -223,6 +221,12 @@ to conform to the XHTML standard. Setting it to I<text/html> will
 generate HTML compatible tags instead
 
 =back
+
+=head1 Subroutines/Methods
+
+=head2 new
+
+Uses C<_arg_list> to process the passed options
 
 =head2 escape_html
 
@@ -390,10 +394,6 @@ Call C<Carp::croak>. Don't load L<Carp> if we don't have to
 =head2 _hash_merge
 
 Simplistic merging of two hashes
-
-=head1 Configuration and Environment
-
-None
 
 =head1 Diagnostics
 
