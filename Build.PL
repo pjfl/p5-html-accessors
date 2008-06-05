@@ -16,7 +16,7 @@ my $requires = { 'perl'                  => q(5.8),
                  'NEXT'                  => q(0.60),
                  'Readonly'              => q(1.03) };
 my $build = Module::Build->new
-   ( build_requires     => { 'version' => q(0.74) },
+   ( build_requires     => { 'Test::More' => q(0.74), 'version'=> q(0.74) },
      create_makefile_pl => q(traditional),
      create_readme      => 1,
      create_packlist    => 0,
