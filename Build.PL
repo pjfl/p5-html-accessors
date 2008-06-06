@@ -23,6 +23,7 @@ my $build = Module::Build->new
      dist_version_from  => q(lib/HTML/Accessors.pm),
      license            => q(perl),
      module_name        => q(HTML::Accessors),
+     notes              => { cpan_testers => 0 },
      requires           => $requires );
 
 $build->create_build_script();
