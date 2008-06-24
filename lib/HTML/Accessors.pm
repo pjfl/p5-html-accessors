@@ -129,10 +129,10 @@ sub AUTOLOAD {
    else { $args = {}; $val = $rest[0] }
 
    if (exists $INP->{ $elem }) {
-      $args->{type}    = $INP->{ $elem };
-      $args->{value}   = delete $args->{default} if (defined $args->{default});
-      $args->{value} ||= $NUL;
-      $elem            = q(input);
+      $args->{type}  = $INP->{ $elem };
+      $args->{value} = delete $args->{default} if (defined $args->{default});
+      $args->{value} = $NUL unless (defined $args->{value});
+      $elem          = q(input);
    }
 
 ## no critic
