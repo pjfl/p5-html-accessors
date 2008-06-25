@@ -15,17 +15,16 @@ my $requires = { 'perl'                  => q(5.8),
                  'HTML::Tagset'          => q(3.10),
                  'NEXT'                  => q(0.60),
                  'Readonly'              => q(1.03) };
-my $cond  = q($ENV{PATH} =~ m{ home/david }mx);
 my $build = Module::Build->new
-   ( build_requires     => { 'Test::More' => q(0.74), 'version'=> q(0.74) },
+   ( build_requires     => { 'Test::More' => q(0.74) },
+     configure_requires => { 'version' => q(0.74) },
      create_makefile_pl => q(traditional),
      create_readme      => 1,
      create_packlist    => 0,
      dist_version_from  => q(lib/HTML/Accessors.pm),
      license            => q(perl),
      module_name        => q(HTML::Accessors),
-     notes              => { cpan_testers      => 1,
-                             cpan_testers_cond => $cond },
+     notes              => { cpan_testers => 1 },
      requires           => $requires );
 
 $build->create_build_script();
