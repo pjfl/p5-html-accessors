@@ -8,7 +8,9 @@ use Module::Build;
 
 use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
-my $requires = { 'perl'                  => q(5.8),
+# Stop chris from smoke testing
+my $cond = q($ENV{PERL5LIB} =~ m{ home/cpan/perl58[123] }mx);
+my $requires = { 'perl'                  => q(5.008),
                  'version'               => q(0.74),
                  'Class::Accessor::Fast' => q(0.31),
                  'HTML::GenerateUtil'    => q(1.08),
@@ -24,7 +26,8 @@ my $build = Module::Build->new
      dist_version_from  => q(lib/HTML/Accessors.pm),
      license            => q(perl),
      module_name        => q(HTML::Accessors),
-     notes              => { cpan_testers => 1 },
+     notes              => { cpan_testers_version => 1,
+                             cpan_testers_cond    => $cond },
      requires           => $requires );
 
 $build->create_build_script();
