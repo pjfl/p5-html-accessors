@@ -28,7 +28,8 @@ my $build = Module::Build->new
      module_name        => q(HTML::Accessors),
      notes              => { cpan_testers_version => 1,
                              cpan_testers_cond    => $cond },
-     requires           => $requires );
+     requires           => $requires,
+     sign               => 1 );
 
 $build->create_build_script();
 
