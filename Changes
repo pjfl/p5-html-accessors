@@ -1,3 +1,11 @@
+2008-09-06
+
+	* lib/HTML/Accessors.pm:
+
+	Tweaked POD. Bumping release to fix broken CPAN Testers database.
+	Prevented smoke testing on perl 5.8.[123] since testers copy of
+	HTML::GenerateUtils is broken
+
 2008-06-02
 
 	* Build.PL:

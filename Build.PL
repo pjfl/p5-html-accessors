@@ -8,7 +8,7 @@ use Module::Build;
 
 use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
-# Stop chris from smoke testing
+# Stop chris from smoke testing with broken HTML::GenerateUtil
 my $cond = q($ENV{PERL5LIB} =~ m{ home/cpan/perl58[123] }mx);
 my $requires = { 'perl'                  => q(5.008),
                  'version'               => q(0.74),
