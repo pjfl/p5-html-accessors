@@ -9,7 +9,7 @@ use Module::Build;
 use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
 # Stop chris from smoke testing with broken HTML::GenerateUtil
-my $cond = q($ENV{PERL5LIB} =~ m{ home/cpan/perl58[123] }mx);
+my $cond     = q(qx(uname -a) =~ m{ canker.bingosnet.co.uk }mx);
 my $requires = { 'perl'                  => q(5.008),
                  'version'               => q(0.74),
                  'Class::Accessor::Fast' => q(0.31),
@@ -17,7 +17,7 @@ my $requires = { 'perl'                  => q(5.008),
                  'HTML::Tagset'          => q(3.10),
                  'NEXT'                  => q(0.60),
                  'Readonly'              => q(1.03) };
-my $build = Module::Build->new
+my $build    = Module::Build->new
    ( build_requires     => { 'Test::More' => q(0.74) },
      configure_requires => { 'version' => q(0.74) },
      create_makefile_pl => q(traditional),
