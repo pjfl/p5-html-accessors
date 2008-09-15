@@ -26,15 +26,13 @@ Readonly my $NUL   => q();
 __PACKAGE__->mk_accessors( keys %{ $ATTRS } );
 
 sub new {
-   my ($me, @rest) = @_;
-   my $args = $me->_arg_list( @rest );
-   my $self = $me->_hash_merge( $ATTRS, $args );
+   my ($proto, @rest) = @_; my $args = $proto->_arg_list( @rest );
 
-   return bless $self, ref $me || $me;
+   return bless $proto->_hash_merge( $ATTRS, $args ), ref $proto || $proto;
 }
 
 sub escape_html {
-   my ($me, @rest) = @_; return HTML::GenerateUtil::escape_html( @rest );
+   my ($self, @rest) = @_; return HTML::GenerateUtil::escape_html( @rest );
 }
 
 sub is_xml {
@@ -42,11 +40,11 @@ sub is_xml {
 }
 
 sub popup_menu {
-   my ($me, @rest) = @_;
+   my ($self, @rest) = @_;
    my ($args, $def, $labels, $opt_attr, $options, $values);
 
    $rest[0] ||= $NUL;
-   $args      = $me->_arg_list( @rest );
+   $args      = $self->_arg_list( @rest );
    $def       = $args->{default} || $NUL; delete $args->{default};
    $labels    = $args->{labels}  || {};   delete $args->{labels};
    $values    = $args->{values}  || [];   delete $args->{values};
@@ -69,19 +67,19 @@ sub popup_menu {
 }
 
 sub radio_group {
-   my ($me, @rest) = @_;
+   my ($self, @rest) = @_;
    my ($args, $cols, $def, $html, $i, $inp, $inp_attr);
    my ($labels, $mode, $name, $values);
 
    $rest[0] ||= $NUL;
-   $args      = $me->_arg_list( @rest );
+   $args      = $self->_arg_list( @rest );
    $cols      = $args->{columns} || q(999999);
    $def       = $args->{default} || 0;
    $labels    = $args->{labels}  || {};
    $name      = $args->{name}    || q(radio);
    $values    = $args->{values}  || [];
    $inp_attr  = { name => $name, type => q(radio) };
-   $mode      = $me->is_xml ? GT_CLOSETAG : 0;
+   $mode      = $self->is_xml ? GT_CLOSETAG : 0;
    $i         = 1;
 
    $inp_attr->{onchange} = $args->{onchange} if ($args->{onchange});
@@ -109,16 +107,16 @@ sub radio_group {
 }
 
 sub scrolling_list {
-   my ($me, @rest) = @_; my $args = $me->_arg_list( @rest );
+   my ($self, @rest) = @_; my $args = $self->_arg_list( @rest );
 
    $args->{multiple} = q(multiple);
-   return $me->popup_menu( $args );
+   return $self->popup_menu( $args );
 }
 
 ## no critic
 sub AUTOLOAD {
 ## critic
-   my ($me, @rest) = @_; my ($args, $elem, $mode, $val);
+   my ($self, @rest) = @_; my ($args, $elem, $mode, $val);
 
    ($elem = $HTML::Accessors::AUTOLOAD) =~ s{ .* :: }{}mx;
    $mode  = GT_ADDNEWLINE;
@@ -139,7 +137,7 @@ sub AUTOLOAD {
    unless ($HTML::Tagset::isKnown{ $elem }) {
 ## critic
       _carp( 'Unknown element '.$elem );
-      return $me->NEXT::AUTOLOAD( @rest );
+      return $self->NEXT::AUTOLOAD( @rest );
    }
 
    $val ||= defined $args->{default} ? delete $args->{default} : $NUL;
@@ -147,20 +145,20 @@ sub AUTOLOAD {
 ## no critic
    if ($HTML::Tagset::emptyElement{ $elem }) {
 ## critic
-      $val = undef; $mode = $me->is_xml ? GT_CLOSETAG : 0;
+      $val = undef; $mode = $self->is_xml ? GT_CLOSETAG : 0;
    }
 
    return generate_tag( $elem, $args, $val, $mode );
 }
 
 sub DESTROY {
-   my ($me, @rest) = @_; return $me->NEXT::DESTROY( @rest );
+   my ($self, @rest) = @_; return $self->NEXT::DESTROY( @rest );
 }
 
 # Private methods
 
 sub _arg_list {
-   my ($me, @rest) = @_;
+   my ($self, @rest) = @_;
 
    return {} unless ($rest[0]);
 
@@ -176,7 +174,7 @@ sub _croak {
 }
 
 sub _hash_merge {
-   my ($me, $l, $r) = @_; return { %{ $l }, %{ $r || {} } };
+   my ($self, $l, $r) = @_; return { %{ $l }, %{ $r || {} } };
 }
 
 1;
