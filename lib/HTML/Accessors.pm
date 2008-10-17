@@ -271,8 +271,8 @@ C<< <select> >> element. For example:
 would return:
 
    <select name="my_field">
-      <option selected="selected">1E<lt>/option>
-      <option>2E<lt>/option>
+      <option selected="selected">1</option>
+      <option>2</option>
    </select>
 
 =head2 radio_group
