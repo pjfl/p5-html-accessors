@@ -10,7 +10,7 @@ use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
 # Stop chris from smoke testing with broken HTML::GenerateUtil
 #my $cond     = q(qx(uname -a) =~ m{ canker.bingosnet.co.uk }mx);
-my $cond     = q($ENV{AUTOMATED_TESTING} || $ENV{COMSPEC});
+my $cond     = q($ENV{AUTOMATED_TESTING} || $ENV{COMSPEC} || $ENV{PATH} =~ m{ srezic }mx);
 my $requires = { 'perl'                  => q(5.008),
                  'version'               => q(0.74),
                  'Class::Accessor::Fast' => q(0.31),
