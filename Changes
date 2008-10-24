@@ -1,5 +1,8 @@
 Revision history for HTML::Accessors
 
+0.1.45   24/10/2008
+         - Tried to disable automated testing some more
+
 0.1.42   17/10/2008
          - Disabled automated testing
 
