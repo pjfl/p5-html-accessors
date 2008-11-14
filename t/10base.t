@@ -11,11 +11,14 @@ use Test::More;
 
 use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
-if ($ENV{AUTOMATED_TESTING} and $OSNAME eq q(darwin)) {
-   plan tests => 1; use_ok( q(Test::More) ); exit 0;
-}
+BEGIN {
+   if ($ENV{AUTOMATED_TESTING}
+       || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx) {
+      plan skip_all => q(CPAN Testing stopped);
+   }
 
-plan tests => 7;
+   plan tests => 7;
+}
 
 use_ok q(HTML::Accessors);
 
