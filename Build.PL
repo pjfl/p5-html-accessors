@@ -18,7 +18,9 @@ my $requires = { 'perl'                  => q(5.008),
                  'NEXT'                  => q(0.60),
                  'Readonly'              => q(1.03) };
 my $build    = Module::Build->new
-   ( build_requires     => { 'Test::Harness'       => q(2.64),
+   ( add_to_cleanup     => [ 'HTML-Accessors-*',
+                             map { ( '*/' x $_ ) . '*~' } 0..5 ],
+     build_requires     => { 'Test::Harness'       => q(2.64),
                              'Test::More'          => q(0.74),
                              'Test::Pod'           => q(1.14) },
      configure_requires => { 'ExtUtils::MakeMaker' => q(6.42),

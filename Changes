@@ -1,5 +1,7 @@
 Revision history for HTML::Accessors
 
+         - Added check for defined values in list passed to popup_menu
+
 0.1.47   14/11/2008
          - New approach to CPAN testing
 

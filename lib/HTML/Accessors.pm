@@ -50,6 +50,8 @@ sub popup_menu {
    $values    = $args->{values}  || [];   delete $args->{values};
 
    for my $val (@{ $values }) {
+      next unless (defined $val);
+
       $opt_attr = $val eq $def ? { selected => q(selected) } : {};
 
       if (exists $labels->{ $val }) {
