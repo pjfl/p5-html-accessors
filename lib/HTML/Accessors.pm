@@ -26,9 +26,9 @@ Readonly my $NUL   => q();
 __PACKAGE__->mk_accessors( keys %{ $ATTRS } );
 
 sub new {
-   my ($proto, @rest) = @_; my $args = $proto->_arg_list( @rest );
+   my ($proto, @rest) = @_; my $args = _arg_list( @rest );
 
-   return bless $proto->_hash_merge( $ATTRS, $args ), ref $proto || $proto;
+   return bless _hash_merge( $ATTRS, $args ), ref $proto || $proto;
 }
 
 sub escape_html {
@@ -36,7 +36,9 @@ sub escape_html {
 }
 
 sub is_xml {
-   return shift->content_type eq q(application/xhtml+xml) ? 1 : 0;
+   my $self = shift;
+
+   return $self->content_type =~ m{ / (.*) xml \z }mx ? 1 : 0;
 }
 
 sub popup_menu {
@@ -44,7 +46,7 @@ sub popup_menu {
    my ($args, $def, $labels, $opt_attr, $options, $values);
 
    $rest[0] ||= $NUL;
-   $args      = $self->_arg_list( @rest );
+   $args      = _arg_list( @rest );
    $def       = $args->{default} || $NUL; delete $args->{default};
    $labels    = $args->{labels}  || {};   delete $args->{labels};
    $values    = $args->{values}  || [];   delete $args->{values};
@@ -74,7 +76,7 @@ sub radio_group {
    my ($labels, $mode, $name, $values);
 
    $rest[0] ||= $NUL;
-   $args      = $self->_arg_list( @rest );
+   $args      = _arg_list( @rest );
    $cols      = $args->{columns} || q(999999);
    $def       = $args->{default} || 0;
    $labels    = $args->{labels}  || {};
@@ -109,7 +111,7 @@ sub radio_group {
 }
 
 sub scrolling_list {
-   my ($self, @rest) = @_; my $args = $self->_arg_list( @rest );
+   my ($self, @rest) = @_; my $args = _arg_list( @rest );
 
    $args->{multiple} = q(multiple);
    return $self->popup_menu( $args );
@@ -157,10 +159,10 @@ sub DESTROY {
    my ($self, @rest) = @_; return $self->NEXT::DESTROY( @rest );
 }
 
-# Private methods
+# Private subroutines
 
 sub _arg_list {
-   my ($self, @rest) = @_;
+   my (@rest) = @_;
 
    return {} unless ($rest[0]);
 
@@ -171,12 +173,8 @@ sub _carp {
    require Carp; goto &Carp::carp;
 }
 
-sub _croak {
-   require Carp; goto &Carp::croak;
-}
-
 sub _hash_merge {
-   my ($self, $l, $r) = @_; return { %{ $l }, %{ $r || {} } };
+   my ($l, $r) = @_; return { %{ $l }, %{ $r || {} } };
 }
 
 1;
@@ -390,10 +388,6 @@ without altering the parameters if they were passed by reference
 =head2 _carp
 
 Call C<Carp::carp>. Don't load L<Carp> if we don't have to
-
-=head2 _croak
-
-Call C<Carp::croak>. Don't load L<Carp> if we don't have to
 
 =head2 _hash_merge
 
