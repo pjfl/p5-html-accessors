@@ -11,12 +11,12 @@ use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 # Stop chris from smoke testing with broken HTML::GenerateUtil
 #my $cond     = q(qx(uname -a) =~ m{ canker.bingosnet.co.uk }mx);
 my $requires = { 'perl'                  => q(5.008),
+                 'parent'                => q(0.221),
                  'version'               => q(0.74),
                  'Class::Accessor::Fast' => q(0.31),
                  'HTML::GenerateUtil'    => q(1.08),
                  'HTML::Tagset'          => q(3.10),
-                 'NEXT'                  => q(0.60),
-                 'Readonly'              => q(1.03) };
+                 'NEXT'                  => q(0.60) };
 my $build    = Module::Build->new
    ( add_to_cleanup     => [ 'HTML-Accessors-*',
                              map { ( '*/' x $_ ) . '*~' } 0..5 ],

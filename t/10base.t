@@ -13,12 +13,13 @@ use Test::More;
 use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
 BEGIN {
-   if ($ENV{AUTOMATED_TESTING}
-       || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx) {
+   if ($ENV{AUTOMATED_TESTING} || $ENV{PERL_CR_SMOKER_CURRENT}
+       || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx
+       || ($ENV{PERL5_CPANPLUS_IS_RUNNING} && $ENV{PERL5_CPAN_IS_RUNNING})) {
       plan skip_all => q(CPAN Testing stopped);
    }
 
-   plan tests => 7;
+   plan tests => 8;
 }
 
 use_ok q(HTML::Accessors);
@@ -59,6 +60,14 @@ ok( $ref->textfield( { default => q(default value), name => q(my_field) } )
     q(textfield-html) );
 
 ok( $ref->radio_group( $args )
-    =~ m{ \A <label> \s+ <input \s+ checked="checked" \s+ tabindex="1"
+    =~ m{ \A <label> \s+ <input \s+ checked \s+ tabindex="1"
           \s+ value="1" \s+ name="my_field" \s+ type="radio"
           >Button \s+ One</label> }mx, q(radio_group-html) );
+
+$args = { default => 1, name => q(my_field), values => [ 1, 2 ] };
+
+ok ( $ref->popup_menu( $args )
+     =~ m{ \A <select \s+ name="my_field"> \s+
+              <option \s+ selected>1</option> \s+
+              <option \s+ >2</option> \s+ </select> }mx, q(html popup_menu) );
+

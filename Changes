@@ -1,5 +1,8 @@
 Revision history for HTML::Accessors
 
+         - Dropped use of Readonly
+         - Now generates just selected and checked in HTML mode
+
 0.1.50   04/12/2008
          - Made is_xml test match more content types
          - Added check for defined values in list passed to popup_menu
