@@ -15,8 +15,7 @@ my $requires = { 'perl'                  => q(5.008),
                  'version'               => q(0.74),
                  'Class::Accessor::Fast' => q(0.31),
                  'HTML::GenerateUtil'    => q(1.08),
-                 'HTML::Tagset'          => q(3.10),
-                 'NEXT'                  => q(0.60) };
+                 'HTML::Tagset'          => q(3.10) };
 my $build    = Module::Build->new
    ( add_to_cleanup     => [ 'HTML-Accessors-*',
                              map { ( '*/' x $_ ) . '*~' } 0..5 ],

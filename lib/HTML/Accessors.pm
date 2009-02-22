@@ -7,7 +7,6 @@ use warnings;
 use parent qw(Class::Accessor::Fast);
 use HTML::GenerateUtil qw(generate_tag :consts);
 use HTML::Tagset;
-use NEXT;
 
 use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
 
@@ -147,9 +146,7 @@ sub AUTOLOAD {
    return generate_tag( $elem, $args, $val, $mode );
 }
 
-sub DESTROY {
-   my ($self, @rest) = @_; return $self->NEXT::DESTROY( @rest );
-}
+sub DESTROY {}
 
 # Private subroutines
 
@@ -395,11 +392,11 @@ C<Carp::carp> is called to issue a warning about undefined elements
 
 =item L<Class::Accessor::Fast>
 
+=item L<Class::C3>
+
 =item L<HTML::GenerateUtil>
 
 =item L<HTML::Tagset>
-
-=item L<NEXT>
 
 =back
 
