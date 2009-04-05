@@ -1,5 +1,8 @@
 Revision history for HTML::Accessors
 
+0.1.56   05/04/2009
+         - More dicking around for CPAN testers benefit
+
 0.1.53   22/02/2009
          - Dropped use of NEXT
          - Dropped use of Readonly
