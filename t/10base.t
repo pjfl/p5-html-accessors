@@ -1,16 +1,14 @@
-#!/usr/bin/perl
-
 # @(#)$Id$
 
 use strict;
 use warnings;
-use English qw(-no_match_vars);
 use File::Spec::Functions;
-use FindBin ();
-use lib catfile( $FindBin::Bin, updir, q(lib) );
+use English  qw(-no_match_vars);
+use FindBin  qw( $Bin );
+use lib (catdir( $Bin, updir, q(lib) ));
 use Test::More;
 
-use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.2.%d', q$Rev$ =~ /\d+/gmx );
 
 BEGIN {
    if ($ENV{AUTOMATED_TESTING} || $ENV{PERL_CR_SMOKER_CURRENT}
@@ -71,3 +69,7 @@ ok ( $ref->popup_menu( $args )
               <option \s+ selected>1</option> \s+
               <option \s+ >2</option> \s+ </select> }mx, q(html popup_menu) );
 
+# Local Variables:
+# mode: perl
+# tab-width: 3
+# End:

@@ -1,5 +1,7 @@
 Revision history for HTML::Accessors
 
+         - Improved testing idioms
+
 0.1.61   12/04/2009
          - More dicking around for CPAN testers benefit
 
