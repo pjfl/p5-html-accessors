@@ -8,7 +8,7 @@ use parent qw(Class::Accessor::Fast);
 use HTML::GenerateUtil qw(generate_tag :consts);
 use HTML::Tagset;
 
-use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.2.%d', q$Rev$ =~ /\d+/gmx );
 
 my $ATTRS = { content_type   => q(application/xhtml+xml) };
 my $INP   = { button         => q(button),
@@ -178,7 +178,7 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Version
 
-0.1.$Rev$
+0.2.$Rev$
 
 =head1 Synopsis
 

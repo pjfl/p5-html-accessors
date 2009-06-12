@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use Module::Build;
 
-use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev$ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.2.%d', q$Rev$ =~ /\d+/gmx );
 
 # Stop chris from smoke testing with broken HTML::GenerateUtil
 #my $cond     = q(qx(uname -a) =~ m{ canker.bingosnet.co.uk }mx);
