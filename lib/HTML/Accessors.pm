@@ -1,14 +1,15 @@
-package HTML::Accessors;
-
 # @(#)$Id$
+
+package HTML::Accessors;
 
 use strict;
 use warnings;
+use version; our $VERSION = qv( sprintf '0.2.%d', q$Rev$ =~ /\d+/gmx );
 use parent qw(Class::Accessor::Fast);
+
+use Carp;
 use HTML::GenerateUtil qw(generate_tag :consts);
 use HTML::Tagset;
-
-use version; our $VERSION = qv( sprintf '0.2.%d', q$Rev$ =~ /\d+/gmx );
 
 my $ATTRS = { content_type   => q(application/xhtml+xml) };
 my $INP   = { button         => q(button),
@@ -70,9 +71,9 @@ sub radio_group {
    my $args     = _arg_list( @rest );
    my $cols     = $args->{columns} || q(999999);
    my $def      = $args->{default} || 0;
-   my $labels   = $args->{labels}  || {};
-   my $name     = $args->{name}    || q(radio);
-   my $values   = $args->{values}  || [];
+   my $labels   = $args->{labels } || {};
+   my $name     = $args->{name   } || q(radio);
+   my $values   = $args->{values } || [];
    my $inp_attr = { name => $name, type => q(radio) };
    my $mode     = $self->is_xml ? GT_CLOSETAG : 0;
    my $i        = 1;
@@ -131,7 +132,7 @@ sub AUTOLOAD {
 ## no critic
    unless ($HTML::Tagset::isKnown{ $elem }) {
 ## critic
-      _carp( 'Unknown element '.$elem );
+      carp "Unknown element $elem";
       return $self->NEXT::AUTOLOAD( @rest );
    }
 
@@ -156,10 +157,6 @@ sub _arg_list {
    return {} unless ($rest[0]);
 
    return ref $rest[0] eq q(HASH) ? { %{ $rest[0] } } : { @rest };
-}
-
-sub _carp {
-   require Carp; goto &Carp::carp;
 }
 
 sub _hash_merge {
@@ -374,17 +371,13 @@ methods to be called with either a list or a hash ref as it's input
 parameters. Makes copies as it goes so that you can change the contents
 without altering the parameters if they were passed by reference
 
-=head2 _carp
-
-Call C<Carp::carp>. Don't load L<Carp> if we don't have to
-
 =head2 _hash_merge
 
 Simplistic merging of two hashes
 
 =head1 Diagnostics
 
-C<Carp::carp> is called to issue a warning about undefined elements
+L<Carp/carp> is called to issue a warning about undefined elements
 
 =head1 Dependencies
 
