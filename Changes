@@ -1,6 +1,6 @@
 Revision history for HTML::Accessors
 
-0.2.76   27/06/2009
+0.2.77   27/06/2009
          - New key for signature file
          - Use Carp directly
 
