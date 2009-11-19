@@ -89,7 +89,8 @@ sub radio_group {
          if ($def =~ m{ \d+ }mx && $val == $def);
       $inp   = generate_tag( q(input), $inp_attr, undef, $mode );
       $inp  .= $labels->{ $val } || $val;
-      $html .= generate_tag( q(label), undef, "\n".$inp, GT_ADDNEWLINE );
+      $html .= generate_tag( q(label), { class => $args->{label_class} },
+                             "\n".$inp, GT_ADDNEWLINE );
 
       if ($cols && $i % $cols == 0) {
          $html .= generate_tag( q(br), undef, undef, $mode );
@@ -278,6 +279,10 @@ zero then a list of radio buttons without breaks is generated
 =item B<default>
 
 Determines which of the radio box will be selected by default
+
+=item B<label_class>
+
+Class of the labels generated for each button
 
 =item B<labels>
 
