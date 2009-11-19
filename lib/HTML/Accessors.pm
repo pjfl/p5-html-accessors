@@ -87,10 +87,9 @@ sub radio_group {
          if ($def !~ m{ \d+ }mx && $val eq $def);
       $inp_attr->{checked } = $self->is_xml ? q(checked) : undef
          if ($def =~ m{ \d+ }mx && $val == $def);
-      $inp   = generate_tag( q(input), $inp_attr, undef, $mode );
-      $inp  .= $labels->{ $val } || $val;
+      $html .= generate_tag( q(input), $inp_attr, undef, $mode );
       $html .= generate_tag( q(label), { class => $args->{label_class} },
-                             "\n".$inp, GT_ADDNEWLINE );
+                             "\n".($labels->{ $val } || $val), GT_ADDNEWLINE );
 
       if ($cols && $i % $cols == 0) {
          $html .= generate_tag( q(br), undef, undef, $mode );
