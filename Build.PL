@@ -7,7 +7,7 @@ use version; our $VERSION = qv( sprintf '0.2.%d', q$Rev$ =~ /\d+/gmx );
 use Module::Build;
 
 my $build = Module::Build->new
-   ( add_to_cleanup     => [ q(Debian_CPANTS.txt), 'HTML-Accessors-*',
+   ( add_to_cleanup     => [ q(Debian_CPANTS.txt), q(HTML-Accessors-*),
                              map { ( '*/' x $_ ) . '*~' } 0..5 ],
      build_requires     => { 'Test::More' => q(0.74) },
      configure_requires => { 'version'    => q(0.74) },
