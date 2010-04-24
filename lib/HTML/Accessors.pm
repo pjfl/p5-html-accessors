@@ -68,15 +68,16 @@ sub popup_menu {
 sub radio_group {
    my ($self, @rest) = @_; my ($html, $inp); $rest[0] ||= $NUL;
 
-   my $args     = _arg_list( @rest );
-   my $cols     = $args->{columns} || q(999999);
-   my $def      = $args->{default} || 0;
-   my $labels   = $args->{labels } || {};
-   my $name     = $args->{name   } || q(radio);
-   my $values   = $args->{values } || [];
-   my $inp_attr = { name => $name, type => q(radio) };
-   my $mode     = $self->is_xml ? GT_CLOSETAG : 0;
-   my $i        = 1;
+   my $args        = _arg_list( @rest );
+   my $cols        = $args->{columns    } || q(999999);
+   my $def         = $args->{default    } || 0;
+   my $labels      = $args->{labels     } || {};
+   my $label_class = $args->{label_class} || q(radio_group_label);
+   my $name        = $args->{name       } || q(radio);
+   my $values      = $args->{values     } || [];
+   my $inp_attr    = { name => $name, type => q(radio) };
+   my $mode        = $self->is_xml ? GT_CLOSETAG : 0;
+   my $i           = 1;
 
    $inp_attr->{onchange} = $args->{onchange} if ($args->{onchange});
 
@@ -88,7 +89,7 @@ sub radio_group {
       $inp_attr->{checked } = $self->is_xml ? q(checked) : undef
          if ($def =~ m{ \d+ }mx && $val == $def);
       $html .= generate_tag( q(input), $inp_attr, undef, $mode );
-      $html .= generate_tag( q(label), { class => $args->{label_class} },
+      $html .= generate_tag( q(label), { class => $label_class },
                              "\n".($labels->{ $val } || $val), GT_ADDNEWLINE );
 
       if ($cols && $i % $cols == 0) {
