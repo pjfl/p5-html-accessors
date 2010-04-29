@@ -1,6 +1,6 @@
 Revision history for HTML::Accessors
 
-0.2.79   2009-11-19
+0.3.85   2009-11-19
          - Added label_class to radio_group
 
 0.2.77   27/06/2009
