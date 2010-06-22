@@ -1,5 +1,8 @@
 Revision history for HTML::Accessors
 
+0.3.86   2010-06-22
+         - Patched broken version number handling in Module::Build
+
 0.3.85   2009-11-19
          - Added label_class to radio_group
 
