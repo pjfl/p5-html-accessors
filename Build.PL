@@ -4,9 +4,16 @@ use strict;
 use warnings;
 use version; our $VERSION = qv( sprintf '0.3.%d', q$Rev$ =~ /\d+/gmx );
 
+use English qw( -no_match_vars );
 use Module::Build;
 
-my $build = Module::Build->new
+sub whimper { my $text = shift; print {*STDOUT} $text."\n"; exit 0 }
+
+BEGIN {
+   eval { require 5.008; }; $EVAL_ERROR and whimper 'Perl minimum 5.8';
+}
+
+Module::Build->new
    ( add_to_cleanup     => [ q(Debian_CPANTS.txt), q(HTML-Accessors-*),
                              map { ( '*/' x $_ ) . '*~' } 0..5 ],
      build_requires     => { 'Test::More' => q(0.74) },
@@ -24,9 +31,7 @@ my $build = Module::Build->new
         'Class::Accessor::Fast' => q(0.31),
         'HTML::GenerateUtil'    => q(1.08),
         'HTML::Tagset'          => q(3.10) },
-     sign               => 1, );
-
-$build->create_build_script();
+     sign               => 1, )->create_build_script;
 
 # Local Variables:
 # mode: perl
