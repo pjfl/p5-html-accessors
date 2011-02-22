@@ -1,5 +1,8 @@
 Revision history for HTML::Accessors
 
+0.3.94   2011-02-22
+         - Suppressed Konig CPAN testing again
+
 0.3.87   2010-06-22
          - Patched broken version number handling in Module::Build
 
