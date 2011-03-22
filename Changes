@@ -1,6 +1,6 @@
 Revision history for HTML::Accessors
 
-0.3.94   2011-02-22
+         - Moved boilerplate M::B subclass code to inc/Bob.pm
          - Suppressed Konig CPAN testing again
 
 0.3.87   2010-06-22
