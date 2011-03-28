@@ -12,8 +12,7 @@ use HTML::GenerateUtil qw(generate_tag :consts);
 use HTML::Tagset;
 
 my $ATTRS = { content_type   => q(application/xhtml+xml) };
-my $INP   = { button         => q(button),
-              checkbox       => q(checkbox),
+my $INP   = { checkbox       => q(checkbox),
               hidden         => q(hidden),
               image_button   => q(image),
               password_field => q(password),
@@ -110,9 +109,7 @@ sub scrolling_list {
    return $self->popup_menu( $args );
 }
 
-## no critic
-sub AUTOLOAD {
-## critic
+sub AUTOLOAD { ## no critic
    my ($self, @rest) = @_; my ($args, $elem, $mode, $val);
 
    ($elem = $HTML::Accessors::AUTOLOAD) =~ s{ .* :: }{}mx;
@@ -130,18 +127,14 @@ sub AUTOLOAD {
       $elem          = q(input);
    }
 
-## no critic
-   unless ($HTML::Tagset::isKnown{ $elem }) {
-## critic
+   unless ($HTML::Tagset::isKnown{ $elem }) { ## no critic
       carp "Unknown element $elem";
       return $self->NEXT::AUTOLOAD( @rest );
    }
 
    $val ||= defined $args->{default} ? delete $args->{default} : $NUL;
 
-## no critic
-   if ($HTML::Tagset::emptyElement{ $elem }) {
-## critic
+   if ($HTML::Tagset::emptyElement{ $elem }) { ## no critic
       $val = undef; $mode = $self->is_xml ? GT_CLOSETAG : 0;
    }
 
