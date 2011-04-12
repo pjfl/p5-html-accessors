@@ -1,5 +1,6 @@
 Revision history for HTML::Accessors
 
+         - Suppressed dcollins CPAN testing
          - Stopped mapping button element to input elements of type button
          - Moved boilerplate M::B subclass code to inc/Bob.pm
          - Suppressed Konig CPAN testing again
