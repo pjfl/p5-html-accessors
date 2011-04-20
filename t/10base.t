@@ -17,12 +17,16 @@ BEGIN {
    $current and $current->notes->{stop_tests}
             and plan skip_all => $current->notes->{stop_tests};
 
-   plan tests => 8;
+   plan tests => 10;
 }
 
 use_ok q(HTML::Accessors);
 
-my $ref = HTML::Accessors->new();
+my $ref  = HTML::Accessors->new();
+
+ok( (not defined $ref->DESTROY), 'Call DESTROY' );
+
+ok( (not defined $ref->not_likely), 'Unknown element' );
 
 ok( $ref->a() =~ m{ <a .* > .* </a> }mx, q(anchor) );
 

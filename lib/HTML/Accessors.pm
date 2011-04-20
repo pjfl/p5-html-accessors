@@ -40,14 +40,14 @@ sub is_xml {
 }
 
 sub popup_menu {
-   my ($self, @rest) = @_; my $options; $rest[0] ||= $NUL;
+   my ($self, @rest) = @_; my $options; $rest[ 0 ] ||= $NUL;
 
    my $args   = _arg_list( @rest );
    my $def    = $args->{default} || $NUL; delete $args->{default};
-   my $labels = $args->{labels}  || {};   delete $args->{labels};
-   my $values = $args->{values}  || [];   delete $args->{values};
+   my $labels = $args->{labels}  || {};   delete $args->{labels };
+   my $values = $args->{values}  || [];   delete $args->{values };
 
-   for my $val (grep { defined $_ } @{ $values }) {
+   for my $val (grep { defined } @{ $values }) {
       my $opt_attr = $val eq $def
                    ? { selected => $self->is_xml ? q(selected) : undef } : {};
 
@@ -65,7 +65,7 @@ sub popup_menu {
 }
 
 sub radio_group {
-   my ($self, @rest) = @_; my ($html, $inp); $rest[0] ||= $NUL;
+   my ($self, @rest) = @_; my ($html, $inp); $rest[ 0 ] ||= $NUL;
 
    my $args        = _arg_list( @rest );
    my $cols        = $args->{columns    } || q(999999);
@@ -78,23 +78,20 @@ sub radio_group {
    my $mode        = $self->is_xml ? GT_CLOSETAG : 0;
    my $i           = 1;
 
-   $inp_attr->{onchange} = $args->{onchange} if ($args->{onchange});
+   $args->{onchange} and $inp_attr->{onchange} = $args->{onchange};
 
    for my $val (@{ $values }) {
       $inp_attr->{value   } = $val;
       $inp_attr->{tabindex} = $i;
-      $inp_attr->{checked } = $self->is_xml ? q(checked) : undef
-         if ($def !~ m{ \d+ }mx && $val eq $def);
-      $inp_attr->{checked } = $self->is_xml ? q(checked) : undef
-         if ($def =~ m{ \d+ }mx && $val == $def);
+      $def !~ m{ \d+ }mx and $val eq $def
+         and $inp_attr->{checked } = $self->is_xml ? q(checked) : undef;
+      $def =~ m{ \d+ }mx and $val == $def
+         and $inp_attr->{checked } = $self->is_xml ? q(checked) : undef;
       $html .= generate_tag( q(input), $inp_attr, undef, $mode );
       $html .= generate_tag( q(label), { class => $label_class },
                              "\n".($labels->{ $val } || $val), GT_ADDNEWLINE );
-
-      if ($cols && $i % $cols == 0) {
-         $html .= generate_tag( q(br), undef, undef, $mode );
-      }
-
+      $cols and $i % $cols == 0
+         and $html .= generate_tag( q(br), undef, undef, $mode );
       delete $inp_attr->{checked};
       $i++;
    }
@@ -110,26 +107,25 @@ sub scrolling_list {
 }
 
 sub AUTOLOAD { ## no critic
-   my ($self, @rest) = @_; my ($args, $elem, $mode, $val);
+   my ($self, @rest) = @_;
 
-   ($elem = $HTML::Accessors::AUTOLOAD) =~ s{ .* :: }{}mx;
-   $mode  = GT_ADDNEWLINE;
+   my $args = {}; my $mode = GT_ADDNEWLINE; my $val = $rest[ 0 ];
 
-   if ($rest[0] && ref $rest[0] eq q(HASH)) {
-      $args = { %{ $rest[0] } }; $val = $rest[1];
+  (my $elem = lc $HTML::Accessors::AUTOLOAD) =~ s{ .* :: }{}mx;
+
+   if ($rest[ 0 ] and ref $rest[ 0 ] eq q(HASH)) {
+      $args = { %{ $rest[ 0 ] } }; $val = $rest[ 1 ];
    }
-   else { $args = {}; $val = $rest[0] }
 
    if (exists $INP->{ $elem }) {
-      $args->{type}  = $INP->{ $elem };
-      $args->{value} = delete $args->{default} if (defined $args->{default});
-      $args->{value} = $NUL unless (defined $args->{value});
-      $elem          = q(input);
+      $args->{type} = $INP->{ $elem };
+      defined $args->{default} and $args->{value} = delete $args->{default};
+      defined $args->{value  } or  $args->{value} = $NUL;
+      $elem = q(input);
    }
 
    unless ($HTML::Tagset::isKnown{ $elem }) { ## no critic
-      carp "Unknown element $elem";
-      return $self->NEXT::AUTOLOAD( @rest );
+      carp "Unknown element $elem"; return;
    }
 
    $val ||= defined $args->{default} ? delete $args->{default} : $NUL;
@@ -146,15 +142,11 @@ sub DESTROY {}
 # Private subroutines
 
 sub _arg_list {
-   my (@rest) = @_;
-
-   return {} unless ($rest[0]);
-
-   return ref $rest[0] eq q(HASH) ? { %{ $rest[0] } } : { @rest };
+   return $_[ 0 ] ? ref $_[ 0 ] eq q(HASH) ? { %{ $_[ 0 ] } } : { @_ } : {};
 }
 
 sub _hash_merge {
-   my ($l, $r) = @_; return { %{ $l }, %{ $r || {} } };
+   return { %{ $_[ 0 ] }, %{ $_[ 1 ] || {} } };
 }
 
 1;
@@ -357,10 +349,14 @@ would return
 The list of input elements contains; button, checkbox, hidden,
 image_button, password_field, radio_button, submit, and textfield
 
+Redispatches the call to the parent class if the requested element
+does not exist in L<isKnown|HTML::Tagset/isKnown>, return undef if
+there is not C<AUTOLOAD> method in
+
 =head2 DESTROY
 
 Implement the C<DESTROY> method so that the C<AUTOLOAD> method doesn't get
-called instead. Re-dispatches the call upstream
+called instead. Re-dispatches the call upstream if possible
 
 =head2 _arg_list
 
