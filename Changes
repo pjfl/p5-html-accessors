@@ -1,5 +1,6 @@
 Revision history for HTML::Accessors
 
+         - Updated POD
          - Fixed bug in AUTOLOAD propagation
          - Suppressed dcollins CPAN testing
          - Stopped mapping button element to input elements of type button

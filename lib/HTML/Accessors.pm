@@ -167,10 +167,10 @@ HTML::Accessors - Generate HTML elements
 
    use HTML::Accessors;
 
-   my $htag = HTML::Accessors->new();
+   my $my_obj = HTML::Accessors->new();
 
    # Create an anchor element
-   $anchor = $htag->a( { href => 'http://...' }, 'This is a link' );
+   $anchor = $my_obj->a( { href => 'http://...' }, 'This is a link' );
 
 =head1 Description
 
@@ -188,7 +188,7 @@ The constructor defines accessors and mutators for one attribute:
 
 =over 3
 
-=item content_type
+=item B<content_type>
 
 Defaults to I<application/xhtml+xml> which causes the generated tags
 to conform to the XHTML standard. Setting it to I<text/html> will
@@ -200,17 +200,26 @@ generate HTML compatible tags instead
 
 =head2 new
 
-Uses C<_arg_list> to process the passed options
+   my $my_obj = HTML::Accessors->new( content_type => q(application/xhtml+xml) );
+
+Uses L</_arg_list> to process the passed options
 
 =head2 escape_html
 
-Expose C<HTML::GenerateUtil::escape_html>
+   my $escaped_html = $my_obj->escape_html( $unescaped_html );
+
+Expose the method L<escape_html|HTML::GenerateUtil/FUNCTIONS>
 
 =head2 is_xml
 
-Returns true if the returned tags will be XHTML
+   my $bool = $my_obj->is_xml;
+
+Returns true if the returned tags will be XHTML. Matches the string I<.xml>
+at the end of the I<content_type>
 
 =head2 popup_menu
+
+   my $html = $my_obj->popup_menu( default => $value, labels => {}, values => [] );
 
 Returns the C<< <select> >> element. The first option passed to
 C<popup_menu> is either a hash ref or a list of key/value pairs. The keys are:
@@ -238,7 +247,7 @@ The rest of the keys and values are passed as attributes to the
 C<< <select> >> element. For example:
 
    $ref = { default => 1, name => q(my_field), values => [ 1, 2 ] };
-   $htag->popup_menu( $ref );
+   $my_obj->popup_menu( $ref );
 
 would return:
 
@@ -300,7 +309,7 @@ For example:
                          4 => q(Button Four), },
             name    => q(my_field),
             values  => [ 1, 2, 3, 4 ] };
-   $htag->radio_group( $ref );
+   $my_obj->radio_group( $ref );
 
 would return:
 
@@ -340,7 +349,7 @@ If the requested element exists in the hard coded list of input
 elements, then the element is set to C<input> and the mapped value
 used as the type attribute in the call to C<generate_tag>. For example;
 
-   $htag->textfield( { default => q(default value), name => q(my_field) } );
+   $my_obj->textfield( { default => q(default value), name => q(my_field) } );
 
 would return
 
@@ -349,14 +358,13 @@ would return
 The list of input elements contains; button, checkbox, hidden,
 image_button, password_field, radio_button, submit, and textfield
 
-Redispatches the call to the parent class if the requested element
-does not exist in L<isKnown|HTML::Tagset/isKnown>, return undef if
-there is not C<AUTOLOAD> method in
+Carp and return C<undef> if the element does not exist in
+L<isKnown|HTML::Tagset/isKnown>
 
 =head2 DESTROY
 
 Implement the C<DESTROY> method so that the C<AUTOLOAD> method doesn't get
-called instead. Re-dispatches the call upstream if possible
+called instead
 
 =head2 _arg_list
 
@@ -371,7 +379,7 @@ Simplistic merging of two hashes
 
 =head1 Diagnostics
 
-L<Carp/carp> is called to issue a warning about undefined elements
+L<Carp|Carp/carp> is called to issue a warning about undefined elements
 
 =head1 Dependencies
 
@@ -401,9 +409,13 @@ Patches are welcome
 
 Peter Flanigan, C<< <Support at RoxSoft.co.uk> >>
 
+=head1 Acknowledgements
+
+Larry Wall - For the Perl programming language
+
 =head1 License and Copyright
 
-Copyright (c) 2008 Peter Flanigan. All rights reserved.
+Copyright (c) 2011 Peter Flanigan. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself. See L<perlartistic>.
@@ -418,4 +430,3 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # mode: perl
 # tab-width: 3
 # End:
-
