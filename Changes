@@ -1,5 +1,6 @@
 Revision history for HTML::Accessors
 
+0.4.104  2011-05-22
          - Updated POD
          - Fixed bug in AUTOLOAD propagation
          - Suppressed dcollins CPAN testing
