@@ -1,5 +1,8 @@
 Revision history for HTML::Accessors
 
+0.5.105  2011-06-26
+         - Radio groups. If the label exists but is undef skip the label
+
 0.4.104  2011-05-22
          - Updated POD
          - Fixed bug in AUTOLOAD propagation

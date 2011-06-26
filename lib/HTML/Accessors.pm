@@ -4,7 +4,7 @@ package HTML::Accessors;
 
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.4.%d', q$Rev$ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.5.%d', q$Rev$ =~ /\d+/gmx );
 use parent qw(Class::Accessor::Fast);
 
 use Carp;
@@ -34,9 +34,7 @@ sub escape_html {
 }
 
 sub is_xml {
-   my $self = shift;
-
-   return $self->content_type =~ m{ / (.*) xml \z }mx ? 1 : 0;
+   return $_[ 0 ]->content_type =~ m{ / (.*) xml \z }mx ? 1 : 0;
 }
 
 sub popup_menu {
@@ -88,8 +86,11 @@ sub radio_group {
       $def =~ m{ \d+ }mx and $val == $def
          and $inp_attr->{checked } = $self->is_xml ? q(checked) : undef;
       $html .= generate_tag( q(input), $inp_attr, undef, $mode );
-      $html .= generate_tag( q(label), { class => $label_class },
-                             "\n".($labels->{ $val } || $val), GT_ADDNEWLINE );
+      (exists $labels->{ $val } and not defined $labels->{ $val })
+         or $html .= generate_tag( q(label),
+                                   { class => $label_class },
+                                   "\n".($labels->{ $val } || $val),
+                                   GT_ADDNEWLINE );
       $cols and $i % $cols == 0
          and $html .= generate_tag( q(br), undef, undef, $mode );
       delete $inp_attr->{checked};
@@ -161,7 +162,7 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Version
 
-0.4.$Rev$
+0.5.$Rev$
 
 =head1 Synopsis
 
