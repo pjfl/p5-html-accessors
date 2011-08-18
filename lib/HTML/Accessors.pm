@@ -89,7 +89,7 @@ sub radio_group {
       (exists $labels->{ $val } and not defined $labels->{ $val })
          or $html .= generate_tag( q(label),
                                    { class => $label_class },
-                                   "\n".($labels->{ $val } || $val),
+                                   ($labels->{ $val } || $val),
                                    GT_ADDNEWLINE );
       $cols and $i % $cols == 0
          and $html .= generate_tag( q(br), undef, undef, $mode );
