@@ -7,7 +7,6 @@ use version; our $VERSION = qv( sprintf '0.5.%d', q$Rev$ =~ /\d+/gmx );
 
 Bob->new( {
    stop_tests => 1,
-   license    => q(perl),
    module     => q(HTML::Accessors),
    home_page  => q(http://www.roxsoft.co.uk),
    requires   => {

@@ -1,5 +1,7 @@
 Revision history for HTML::Accessors
 
+         - Updated inc::Bob
+
 0.5.105  2011-06-26
          - Radio groups. If the label exists but is undef skip the label
 
