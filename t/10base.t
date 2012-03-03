@@ -53,7 +53,7 @@ $args = { columns => 2,
 ok( $ref->radio_group( $args )
     =~ m{ \A <input \s+ checked="checked" \s+ tabindex="1"
           \s+ value="1" \s+ name="my_field" \s+ type="radio" \s+
-          /><label \s+ class="radio_group_label"> \s+ Button \s+
+          /><label \s+ class="radio_group_label"> Button \s+
           One</label> }mx, q(radio_group) );
 
 $ref = HTML::Accessors->new( content_type => q(text/html) );
@@ -65,7 +65,7 @@ ok( $ref->textfield( { default => q(default value), name => q(my_field) } )
 ok( $ref->radio_group( $args )
     =~ m{ \A <input \s+ checked \s+ tabindex="1"
           \s+ value="1" \s+ name="my_field" \s+ type="radio"
-          ><label \s+ class="radio_group_label"> \s+ Button \s+
+          ><label \s+ class="radio_group_label"> Button \s+
           One</label> }mx, q(radio_group-html) );
 
 $args = { default => 1, name => q(my_field), values => [ 1, 2 ] };
