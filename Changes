@@ -1,6 +1,7 @@
 Revision history for HTML::Accessors
 
-0.6.109  2012-03-03
+0.6.112  2012-03-03
+	 - Turned CPAN testing on for shits and giggles
          - Added classes hash to popupMenu
          - Updated inc::Bob
 
