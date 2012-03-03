@@ -1,5 +1,7 @@
 Revision history for HTML::Accessors
 
+0.6.108  2012-03-03
+         - Added classes hash to popupMenu
          - Updated inc::Bob
 
 0.5.105  2011-06-26
