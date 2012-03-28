@@ -10,7 +10,7 @@ Bob->new( {
    module     => q(HTML::Accessors),
    home_page  => q(http://www.roxsoft.co.uk),
    requires   => {
-      'perl'                  => q(5.008),
+      'perl'                  => q(5.010),
       'parent'                => q(0.221),
       'version'               => q(0.74),
       'Class::Accessor::Fast' => q(0.31),

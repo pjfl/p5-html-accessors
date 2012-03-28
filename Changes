@@ -1,6 +1,7 @@
 Revision history for HTML::Accessors
 
-0.6.116  2012-03-29
+0.6.117  2012-03-29
+         - Upped min Perl ver to 5.10
          - Funs over stopping CPAN testing
          - Updated inc::Bob. Added inc::CPANTesting
 
