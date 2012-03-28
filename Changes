@@ -1,5 +1,7 @@
 Revision history for HTML::Accessors
 
+0.6.116  2012-03-29
+         - Funs over stopping CPAN testing
          - Updated inc::Bob. Added inc::CPANTesting
 
 0.6.113  2012-03-03

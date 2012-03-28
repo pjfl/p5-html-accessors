@@ -6,6 +6,7 @@ use inc::Bob; # Module::Build subclass
 use version; our $VERSION = qv( sprintf '0.6.%d', q$Rev$ =~ /\d+/gmx );
 
 Bob->new( {
+   stop_tests => 1,
    module     => q(HTML::Accessors),
    home_page  => q(http://www.roxsoft.co.uk),
    requires   => {
