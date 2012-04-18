@@ -4,7 +4,7 @@ package HTML::Accessors;
 
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.6.%d', q$Rev$ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.7.%d', q$Rev$ =~ /\d+/gmx );
 use parent qw(Class::Accessor::Fast);
 
 use Carp;
@@ -165,7 +165,7 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Version
 
-0.6.$Rev$
+0.7.$Rev$
 
 =head1 Synopsis
 
@@ -396,8 +396,6 @@ L<Carp|Carp/carp> is called to issue a warning about undefined elements
 
 =item L<Class::Accessor::Fast>
 
-=item L<Class::C3>
-
 =item L<HTML::GenerateUtil>
 
 =item L<HTML::Tagset>
@@ -439,4 +437,3 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 # mode: perl
 # tab-width: 3
 # End:
-

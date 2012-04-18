@@ -1,5 +1,8 @@
 Revision history for HTML::Accessors
 
+0.7.122  2012-04-18
+         - Turned CPAN testing on. No exceptions
+         - Modernised tests
          - Updated inc::Bob to 1.3
          - Updated inc::Bob to 1.2
 
