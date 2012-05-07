@@ -1,5 +1,11 @@
 Revision history for HTML::Accessors
 
+0.7.123  2012-05-07
+         - Create CPAN testing exceptions for the usual suspects because of
+           860317fe-771b-1014-bd10-14ac237ab312. Honestly, how fucked up
+           does CPAN testing have to get before something is done to
+           improve the quality of the results
+
 0.7.122  2012-04-18
          - Turned CPAN testing on. No exceptions
          - Modernised tests
