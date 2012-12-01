@@ -18,28 +18,36 @@ BEGIN {
             and plan skip_all => $current->notes->{stop_tests};
 }
 
-use HTML::Accessors;
+use_ok q(HTML::Accessors);
 
-my $hacc  = HTML::Accessors->new();
+my $hacc = HTML::Accessors->new();
 
 ok( (not defined $hacc->DESTROY), 'Call DESTROY' );
 
 ok( (not defined $hacc->not_likely), 'Unknown element' );
 
-like $hacc->a(), qr{ <a .* > .* </a> }mx, 'Anchor';
+like $hacc->a(), qr{ <a .* > .* </a> }msx, 'XHTML - anchor';
 
 like $hacc->span( { class => 'test' }, 'content' ),
-   qr{ <span \s+ class="test">content</span> }mx, 'Span';
+   qr{ <span \s+ class="test">content</span> }msx, 'XHTML - span';
 
-is $hacc->textfield( { default => q(default value), name => q(my_field) } ),
-   '<input value="default value" name="my_field" type="text" />', 'Textfield';
+my $field = $hacc->textfield( { default => q(default value),
+                                name    => q(my_field) } );
+
+like $field, qr{ \A <input (.*)? type="text" (.*)? /> \z }msx,
+   'XHTML - textfield';
+
+like $field, qr{ value="default \s+ value" }msx,
+   'XHTML - textfield - default value';
+
+like $field, qr{ name="my_field" }msx, 'XHTML - textfield - field name';
 
 my $args = { default => 1, name => q(my_field), values => [ 1, 2 ] };
 
 like $hacc->popup_menu( $args ),
    qr{ \A <select \s+ name="my_field"> \s+
           <option \s+ selected="selected">1</option> \s+
-          <option \s+ >2</option> \s+ </select> }mx, 'Popup menu';
+          <option \s+ >2</option> \s+ </select> }msx, 'XHTML - popup menu';
 
 $args = { columns => 2,
           default => 1,
@@ -50,30 +58,44 @@ $args = { columns => 2,
           name    => q(my_field),
           values  => [ 1, 2, 3, 4 ] };
 
-like $hacc->radio_group( $args ),
-   qr{ \A <input \s+ checked="checked" \s+ tabindex="1"
-          \s+ value="1" \s+ name="my_field" \s+ type="radio" \s+
-          /><label \s+ class="radio_group_label"> Button \s+
-          One</label> }mx, 'Radio group';
+$field = $hacc->radio_group( $args );
+
+like $field, qr{ \A <input (.*)? type="radio" }msx, 'XHTML - radio group';
+
+like $field, qr{ name="my_field"  }msx, 'XHTML - radio group - field name';
+
+like $field, qr{ <label \s+ class="radio_group_label"> Button \s+ One }msx,
+   'XHTML - radio group - label';
 
 $hacc = HTML::Accessors->new( content_type => q(text/html) );
 
-is $hacc->textfield( { default => q(default value), name => q(my_field) } ),
-   '<input value="default value" name="my_field" type="text">',
-   'Textfield - HTML';
+$field = $hacc->textfield( { default => q(default value),
+                             name    => q(my_field) } );
 
-like $hacc->radio_group( $args ),
-   qr{ \A <input \s+ checked \s+ tabindex="1"
-          \s+ value="1" \s+ name="my_field" \s+ type="radio"
-          ><label \s+ class="radio_group_label"> Button \s+
-          One</label> }mx, 'Radio group - HTML';
+like $field, qr{ \A <input (.*)? type="text" (.*)? > \z }msx,
+   'HTML - textfield';
+
+like $field, qr{ value="default \s+ value" }msx,
+   'HTML - textfield - default value';
+
+like $field, qr{ name="my_field" }msx,
+   'HTML - textfield - field name';
+
+$field = $hacc->radio_group( $args );
+
+like $field, qr{ \A <input (.*)? type="radio" }msx, 'HTML - radio group';
+
+like $field, qr{ name="my_field"  }msx, 'HTML - radio group - field name';
+
+like $field, qr{ <label \s+ class="radio_group_label"> Button \s+ One }msx,
+   'HTML - radio group - label';
 
 $args = { default => 1, name => q(my_field), values => [ 1, 2 ] };
 
 like $hacc->popup_menu( $args ),
    qr{ \A <select \s+ name="my_field"> \s+
           <option \s+ selected>1</option> \s+
-          <option \s+ >2</option> \s+ </select> }mx, 'Popup menu - HTML';
+          <option \s+ >2</option> \s+ </select> }msx, 'HTML - popup menu';
 
 done_testing;
 

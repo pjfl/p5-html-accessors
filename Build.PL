@@ -21,6 +21,8 @@ Bob->new( {
 } )->create_build_script; # Goal!
 
 # Local Variables:
+# eval: (load-project-state "html-accessors")
 # mode: perl
+# tab-title: Accessors
 # tab-width: 3
 # End:
