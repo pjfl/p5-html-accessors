@@ -1,87 +1,90 @@
 Revision history for HTML::Accessors
 
-0.7.125  2012-12-01
-         - Fixed hash order dependent test
-         - Updated inc::Bob to 1.7
+0.8.1     2013-05-16 21:53:20
+          - Converted from SVN to Git
 
-0.7.124  2012-05-07
-         - Add POD spelling test
-         - Updated inc::Bob to 1.5
+0.7.125   2012-12-01
+          - Fixed hash order dependent test
+          - Updated inc::Bob to 1.7
 
-0.7.123  2012-05-07
-         - Create CPAN testing exceptions 860317fe-771b-1014-bd10-14ac237ab312
+0.7.124   2012-05-07
+          - Add POD spelling test
+          - Updated inc::Bob to 1.5
 
-0.7.122  2012-04-18
-         - Turned CPAN testing on. No exceptions
-         - Modernised tests
-         - Updated inc::Bob to 1.3
-         - Updated inc::Bob to 1.2
+0.7.123   2012-05-07
+          - Create CPAN testing exceptions 860317fe-771b-1014-bd10-14ac237ab312
 
-0.6.117  2012-03-29
-         - Upped min Perl ver to 5.10
-         - Funs over stopping CPAN testing
-         - Updated inc::Bob. Added inc::CPANTesting
+0.7.122   2012-04-18
+          - Turned CPAN testing on. No exceptions
+          - Modernised tests
+          - Updated inc::Bob to 1.3
+          - Updated inc::Bob to 1.2
 
-0.6.113  2012-03-03
-         - Turned CPAN testing on for shits and giggles
-         - Added classes hash to popupMenu
-         - Updated inc::Bob
+0.6.117   2012-03-29
+          - Upped min Perl ver to 5.10
+          - Funs over stopping CPAN testing
+          - Updated inc::Bob. Added inc::CPANTesting
 
-0.5.105  2011-06-26
-         - Radio groups. If the label exists but is undef skip the label
+0.6.113   2012-03-03
+          - Turned CPAN testing on for shits and giggles
+          - Added classes hash to popupMenu
+          - Updated inc::Bob
 
-0.4.104  2011-05-22
-         - Updated POD
-         - Fixed bug in AUTOLOAD propagation
-         - Stopped mapping button element to input elements of type button
-         - Moved boilerplate M::B subclass code to inc/Bob.pm
+0.5.105   2011-06-26
+          - Radio groups. If the label exists but is undef skip the label
 
-0.3.87   2010-06-22
-         - Patched broken version number handling in Module::Build
+0.4.104   2011-05-22
+          - Updated POD
+          - Fixed bug in AUTOLOAD propagation
+          - Stopped mapping button element to input elements of type button
+          - Moved boilerplate M::B subclass code to inc/Bob.pm
 
-0.3.85   2009-11-19
-         - Added label_class to radio_group
+0.3.87    2010-06-22
+          - Patched broken version number handling in Module::Build
 
-0.2.77   27/06/2009
-         - New key for signature file
-         - Use Carp directly
+0.3.85    2009-11-19
+          - Added label_class to radio_group
 
-0.2.68   12/06/2009
-         - Improved testing idioms
+0.2.77    27/06/2009
+          - New key for signature file
+          - Use Carp directly
 
-0.1.61   12/04/2009
-         - More dicking around for CPAN testers benefit
+0.2.68    12/06/2009
+          - Improved testing idioms
 
-0.1.56   05/04/2009
-         - More dicking around for CPAN testers benefit
+0.1.61    12/04/2009
+          - More dicking around for CPAN testers benefit
 
-0.1.53   22/02/2009
-         - Dropped use of NEXT
-         - Dropped use of Readonly
-         - Now generates just selected and checked in HTML mode
+0.1.56    05/04/2009
+          - More dicking around for CPAN testers benefit
 
-0.1.50   04/12/2008
-         - Made is_xml test match more content types
-         - Added check for defined values in list passed to popup_menu
+0.1.53    22/02/2009
+          - Dropped use of NEXT
+          - Dropped use of Readonly
+          - Now generates just selected and checked in HTML mode
 
-0.1.47   14/11/2008
-         - New approach to CPAN testing
+0.1.50    04/12/2008
+          - Made is_xml test match more content types
+          - Added check for defined values in list passed to popup_menu
 
-0.1.45   24/10/2008
-         - Tried to disable automated testing some more
+0.1.47    14/11/2008
+          - New approach to CPAN testing
 
-0.1.42   17/10/2008
-         - Disabled automated testing
+0.1.45    24/10/2008
+          - Tried to disable automated testing some more
 
-         06/09/2008
-         - Tweaked POD. Bumping release to fix broken CPAN Testers database.
-         - Prevented smoke testing on perl 5.8.[123] since testers copy of
-         - HTML::GenerateUtils is broken
+0.1.42    17/10/2008
+          - Disabled automated testing
 
-         02/06/2008
-         - Made version a build requirement
+          06/09/2008
+          - Tweaked POD. Bumping release to fix broken CPAN Testers database.
+          - Prevented smoke testing on perl 5.8.[123] since testers copy of
+          - HTML::GenerateUtils is broken
 
-         23/05/2008
-         - Added POD and POD coverage tests
+          02/06/2008
+          - Made version a build requirement
+
+          23/05/2008
+          - Added POD and POD coverage tests
 
 

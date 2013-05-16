@@ -1,10 +1,11 @@
-# @(#)$Id$
+# @(#)$Ident: Accessors.pm 2013-05-16 20:42 pjf ;
 
 package HTML::Accessors;
 
+use 5.01;
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.7.%d', q$Rev$ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.8.%d', q$Rev: 1 $ =~ /\d+/gmx );
 use parent qw(Class::Accessor::Fast);
 
 use Carp;
@@ -165,7 +166,7 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Version
 
-0.7.$Rev$
+Describes version v0.8.$Rev: 1 $ of L<HTML::Accessors>
 
 =head1 Synopsis
 
