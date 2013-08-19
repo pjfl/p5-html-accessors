@@ -48,46 +48,5 @@ Revision history for HTML::Accessors
 0.3.85    2009-11-19
           - Added label_class to radio_group
 
-0.2.77    27/06/2009
-          - New key for signature file
-          - Use Carp directly
-
-0.2.68    12/06/2009
-          - Improved testing idioms
-
-0.1.61    12/04/2009
-          - More dicking around for CPAN testers benefit
-
-0.1.56    05/04/2009
-          - More dicking around for CPAN testers benefit
-
-0.1.53    22/02/2009
-          - Dropped use of NEXT
-          - Dropped use of Readonly
-          - Now generates just selected and checked in HTML mode
-
-0.1.50    04/12/2008
-          - Made is_xml test match more content types
-          - Added check for defined values in list passed to popup_menu
-
-0.1.47    14/11/2008
-          - New approach to CPAN testing
-
-0.1.45    24/10/2008
-          - Tried to disable automated testing some more
-
-0.1.42    17/10/2008
-          - Disabled automated testing
-
-          06/09/2008
-          - Tweaked POD. Bumping release to fix broken CPAN Testers database.
-          - Prevented smoke testing on perl 5.8.[123] since testers copy of
-          - HTML::GenerateUtils is broken
-
-          02/06/2008
-          - Made version a build requirement
-
-          23/05/2008
-          - Added POD and POD coverage tests
 
 
