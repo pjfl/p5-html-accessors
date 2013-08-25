@@ -1,37 +1,39 @@
-# @(#)$Ident: Accessors.pm 2013-08-15 18:53 pjf ;
+# @(#)$Ident: Accessors.pm 2013-08-25 23:49 pjf ;
 
 package HTML::Accessors;
 
 use 5.01;
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.9.%d', q$Rev: 1 $ =~ /\d+/gmx );
-use parent qw( Class::Accessor::Fast );
+use version; our $VERSION = qv( sprintf '0.9.%d', q$Rev: 3 $ =~ /\d+/gmx );
 
 use Carp;
 use HTML::GenerateUtil qw( generate_tag :consts );
 use HTML::Tagset;
 
-my $ATTRS = { content_type   => q(application/xhtml+xml) };
-my $INP   = { checkbox       => q(checkbox),
-              hidden         => q(hidden),
-              image_button   => q(image),
-              password_field => q(password),
-              radio_button   => q(radio),
-              submit         => q(submit),
-              textfield      => q(text) };
-my $NUL   = q();
-
-__PACKAGE__->mk_accessors( keys %{ $ATTRS } );
+my $INP = { checkbox       => 'checkbox',
+            hidden         => 'hidden',
+            image_button   => 'image',
+            password_field => 'password',
+            radio_button   => 'radio',
+            submit         => 'submit',
+            textfield      => 'text' };
+my $NUL = q();
 
 sub new {
-   my ($self, @rest) = @_; my $args = _arg_list( @rest );
+   my ($self, @args) = @_; my $class = ref $self || $self;
 
-   return bless _hash_merge( $ATTRS, $args ), ref $self || $self;
+   my $attr = { content_type => 'application/xhtml+xml' };
+
+   return bless _hash_merge( $attr, _arg_list( @args ) ), $class;
+}
+
+sub content_type {
+   return $_[ 0 ]->{content_type};
 }
 
 sub escape_html {
-   my ($self, @rest) = @_; return HTML::GenerateUtil::escape_html( @rest );
+   my ($self, @args) = @_; return HTML::GenerateUtil::escape_html( @args );
 }
 
 sub is_xml {
@@ -39,17 +41,17 @@ sub is_xml {
 }
 
 sub popup_menu {
-   my ($self, @rest) = @_; my $options; $rest[ 0 ] ||= $NUL;
+   my ($self, @args) = @_; my $options;
 
-   my $args    = _arg_list( @rest );
-   my $classes = $args->{classes} || {};   delete $args->{classes};
-   my $def     = $args->{default} || $NUL; delete $args->{default};
-   my $labels  = $args->{labels } || {};   delete $args->{labels };
-   my $values  = $args->{values } || [];   delete $args->{values };
+   my $args    = _arg_list( @args );
+   my $classes = delete $args->{classes} || {};
+   my $def     = delete $args->{default} || $NUL;
+   my $labels  = delete $args->{labels } || {};
+   my $values  = delete $args->{values } || [];
 
    for my $val (grep { defined } @{ $values }) {
-      my $opt_attr = $val eq $def
-                   ? { selected => $self->is_xml ? q(selected) : undef } : {};
+      my $opt_attr = $val eq $def ? { selected => $self->is_xml
+                                                ? 'selected' : undef } : {};
 
       exists $classes->{ $val } and $opt_attr->{class} = $classes->{ $val };
 
@@ -57,83 +59,81 @@ sub popup_menu {
          $opt_attr->{value} = $val; $val = $labels->{ $val };
       }
 
-      $options .= generate_tag( q(option), $opt_attr, $val, GT_ADDNEWLINE );
+      $options .= generate_tag( 'option', $opt_attr, $val, GT_ADDNEWLINE );
    }
 
    if ($options) { $options = "\n".$options }
-   else { $options = generate_tag( q(option), undef, $NUL, GT_ADDNEWLINE ) }
+   else { $options = generate_tag( 'option', undef, $NUL, GT_ADDNEWLINE ) }
 
-   return generate_tag( q(select), $args, $options, GT_ADDNEWLINE );
+   return generate_tag( 'select', $args, $options, GT_ADDNEWLINE );
 }
 
 sub radio_group {
-   my ($self, @rest) = @_; my ($html, $inp); $rest[ 0 ] ||= $NUL;
+   my ($self, @args) = @_;
 
-   my $args        = _arg_list( @rest );
-   my $cols        = $args->{columns    } || q(999999);
+   my $args        = _arg_list( @args );
+   my $cols        = $args->{columns    } || '999999';
    my $def         = $args->{default    } || 0;
    my $labels      = $args->{labels     } || {};
-   my $label_class = $args->{label_class} || q(radio_group_label);
-   my $name        = $args->{name       } || q(radio);
+   my $label_class = $args->{label_class} || 'radio_group_label';
+   my $name        = $args->{name       } || 'radio';
    my $values      = $args->{values     } || [];
-   my $inp_attr    = { name => $name, type => q(radio) };
+   my $inp_attr    = { name => $name, type => 'radio' };
    my $mode        = $self->is_xml ? GT_CLOSETAG : 0;
+   my $html        = $NUL;
    my $i           = 1;
 
    $args->{onchange} and $inp_attr->{onchange} = $args->{onchange};
 
-   for my $val (@{ $values }) {
+   for my $val (grep { defined } @{ $values }) {
       $inp_attr->{value   } = $val;
       $inp_attr->{tabindex} = $i;
-      $def !~ m{ \d+ }mx and $val eq $def
-         and $inp_attr->{checked } = $self->is_xml ? q(checked) : undef;
-      $def =~ m{ \d+ }mx and $val == $def
-         and $inp_attr->{checked } = $self->is_xml ? q(checked) : undef;
-      $html .= generate_tag( q(input), $inp_attr, undef, $mode );
-      (exists $labels->{ $val } and not defined $labels->{ $val })
-         or $html .= generate_tag( q(label),
-                                   { class => $label_class },
-                                   ($labels->{ $val } || $val),
-                                   GT_ADDNEWLINE );
-      $cols and $i % $cols == 0
-         and $html .= generate_tag( q(br), undef, undef, $mode );
+      $val =~ m{ \d+ }mx and $def =~ m{ \d+ }mx  and $val == $def
+         and $inp_attr->{checked } = $self->is_xml ? 'checked' : undef;
+     ($val !~ m{ \d+ }mx or  $def !~ m{ \d+ }mx) and $val eq $def
+         and $inp_attr->{checked } = $self->is_xml ? 'checked' : undef;
+      $html .= generate_tag( 'input', $inp_attr, undef, $mode );
+     (exists $labels->{ $val } and not defined $labels->{ $val })
+         or  $html .= generate_tag( 'label',
+                                    { class => $label_class },
+                                    ($labels->{ $val } || $val),
+                                    GT_ADDNEWLINE );
+      $i % $cols == 0 and $html .= generate_tag( 'br', undef, undef, $mode );
       delete $inp_attr->{checked};
       $i++;
    }
 
-   return $html || $NUL;
+   return $html;
 }
 
 sub scrolling_list {
-   my ($self, @rest) = @_; my $args = _arg_list( @rest );
+   my ($self, @args) = @_; my $args = _arg_list( @args );
 
-   $args->{multiple} = q(multiple);
+   $args->{multiple} = 'multiple';
    return $self->popup_menu( $args );
 }
 
 sub AUTOLOAD { ## no critic
-   my ($self, @rest) = @_;
+   my ($self, @args) = @_; my $args = {};
 
-   my $args = {}; my $mode = GT_ADDNEWLINE; my $val = $rest[ 0 ];
+   my $mode = GT_ADDNEWLINE; my $val = $args[ 0 ];
 
   (my $elem = lc $HTML::Accessors::AUTOLOAD) =~ s{ .* :: }{}mx;
 
-   if ($rest[ 0 ] and ref $rest[ 0 ] eq q(HASH)) {
-      $args = { %{ $rest[ 0 ] } }; $val = $rest[ 1 ];
-   }
+   if ($val and ref $val eq 'HASH') { $args = { %{ $val } }; $val = $args[ 1 ] }
 
    if (exists $INP->{ $elem }) {
       $args->{type} = $INP->{ $elem };
       defined $args->{default} and $args->{value} = delete $args->{default};
       defined $args->{value  } or  $args->{value} = $NUL;
-      $elem = q(input);
+      $elem = 'input';
    }
 
    unless ($HTML::Tagset::isKnown{ $elem }) { ## no critic
       carp "Unknown element $elem"; return;
    }
 
-   $val ||= defined $args->{default} ? delete $args->{default} : $NUL;
+   $val //= delete $args->{default} // $NUL;
 
    if ($HTML::Tagset::emptyElement{ $elem }) { ## no critic
       $val = undef; $mode = $self->is_xml ? GT_CLOSETAG : 0;
@@ -147,7 +147,7 @@ sub DESTROY {}
 # Private subroutines
 
 sub _arg_list {
-   return $_[ 0 ] ? ref $_[ 0 ] eq q(HASH) ? { %{ $_[ 0 ] } } : { @_ } : {};
+   return $_[ 0 ] ? ref $_[ 0 ] eq 'HASH' ? { %{ $_[ 0 ] } } : { @_ } : {};
 }
 
 sub _hash_merge {
@@ -166,7 +166,7 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Version
 
-Describes version v0.9.$Rev: 1 $ of L<HTML::Accessors>
+Describes version v0.9.$Rev: 3 $ of L<HTML::Accessors>
 
 =head1 Synopsis
 
@@ -208,6 +208,12 @@ generate HTML compatible tags instead
    my $my_obj = HTML::Accessors->new( content_type => q(application/xhtml+xml) );
 
 Uses L</_arg_list> to process the passed options
+
+=head2 content_type
+
+   $content_type = $self->content_type( $new_type );
+
+Accessor / mutator for the C<content_type> attribute
 
 =head2 escape_html
 

@@ -43,6 +43,12 @@ The constructor defines accessors and mutators for one attribute:
 
 Uses ["\_arg\_list"](#\_arg\_list) to process the passed options
 
+## content\_type
+
+    $content_type = $self->content_type( $new_type );
+
+Accessor / mutator for the `content_type` attribute
+
 ## escape\_html
 
     my $escaped_html = $my_obj->escape_html( $unescaped_html );
