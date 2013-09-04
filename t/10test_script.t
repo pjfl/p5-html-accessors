@@ -1,8 +1,8 @@
-# @(#)$Ident: 10test_script.t 2013-08-25 23:41 pjf ;
+# @(#)$Ident: 10test_script.t 2013-09-04 21:15 pjf ;
 
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.10.%d', q$Rev: 1 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.11.%d', q$Rev: 1 $ =~ /\d+/gmx );
 use File::Spec::Functions   qw( catdir updir );
 use FindBin                 qw( $Bin );
 use lib                 catdir( $Bin, updir, 'lib' );
@@ -68,7 +68,7 @@ my $args = { default => 1, labels => { 1 => 'a', 2 => 'b', },
 
 like $hacc->popup_menu( $args ),
    qr{ \A <select \s+ name="my_field"> \s+
-          <option \s+ value="1" \s+ selected="selected">a</option> \s+
+          <option \s+ (.*)? selected="selected" (.*)? >a</option> \s+
           <option \s+ value="2">b</option> \s+ </select> }msx,
    'XHTML - popup menu';
 

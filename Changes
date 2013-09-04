@@ -1,5 +1,8 @@
 Revision history for HTML::Accessors
 
+0.11.1    2013-09-04 22:21:36
+          - Fixed hash order bug in XHTML Popup test
+
 0.10.1    2013-09-03 14:24:17
           - Updated toolchain
 
