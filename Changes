@@ -1,5 +1,9 @@
 Revision history for HTML::Accessors
 
+0.12.1    2014-08-10 08:42:28
+          - Fixed test due to change in HTML::GenerateUtil
+          - Removed Ideent and VERSION strings
+
 0.11.1    2013-09-04 22:21:36
           - Fixed hash order bug in XHTML Popup test
 

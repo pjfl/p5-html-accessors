@@ -1,14 +1,10 @@
-# @(#)$Ident: 10test_script.t 2013-09-04 21:15 pjf ;
-
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.11.%d', q$Rev: 1 $ =~ /\d+/gmx );
-use File::Spec::Functions   qw( catdir updir );
-use FindBin                 qw( $Bin );
-use lib                 catdir( $Bin, updir, 'lib' );
+use File::Spec::Functions qw( catdir updir );
+use FindBin               qw( $Bin );
+use lib               catdir( $Bin, updir, 'lib' );
 
 use Module::Build;
-use Test::More;
 
 my $notes = {}; my $perl_ver;
 
@@ -18,6 +14,7 @@ BEGIN {
       $perl_ver = $notes->{min_perl_version} || 5.008;
 }
 
+use Test::More;
 use Test::Requires "${perl_ver}";
 use English qw( -no_match_vars );
 
@@ -139,7 +136,7 @@ $args = { classes => {}, default => 1, name => 'my_field', values => [ 1, 2 ] };
 like $hacc->popup_menu( $args ),
    qr{ \A <select \s+ name="my_field"> \s+
           <option \s+ selected>1</option> \s+
-          <option \s+ >2</option> \s+ </select> }msx, 'HTML - popup menu';
+          <option \s* >2</option> \s* </select> }msx, 'HTML - popup menu';
 
 done_testing;
 
