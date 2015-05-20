@@ -42,6 +42,7 @@ peter
 api
 checkbox
 javascript
+merchantability
 popup
 stdin
 textfield

@@ -6,12 +6,12 @@ use lib               catdir( $Bin, updir, 'lib' );
 
 use Module::Build;
 
-my $notes = {}; my $perl_ver;
+my $builder; my $notes = {}; my $perl_ver;
 
 BEGIN {
-   my $builder = eval { Module::Build->current };
-      $builder and $notes = $builder->notes;
-      $perl_ver = $notes->{min_perl_version} || 5.008;
+   $builder   = eval { Module::Build->current };
+   $builder and $notes = $builder->notes;
+   $perl_ver  = $notes->{min_perl_version} || 5.008;
 }
 
 use Test::More;

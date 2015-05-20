@@ -1,5 +1,7 @@
 Revision history for HTML::Accessors
 
+          - Added badges and public repository
+
 0.12.1    2014-08-10 08:42:28
           - Fixed test due to change in HTML::GenerateUtil
           - Removed Ideent and VERSION strings

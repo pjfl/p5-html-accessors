@@ -3,11 +3,12 @@ package HTML::Accessors;
 use 5.01;
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.12.%d', q$Rev: 2 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.12.%d', q$Rev: 3 $ =~ /\d+/gmx );
 
 use Carp;
 use HTML::GenerateUtil qw( generate_tag :consts );
 use HTML::Tagset;
+use Scalar::Util       qw( blessed );
 
 my $INP = { checkbox       => 'checkbox',
             hidden         => 'hidden',
@@ -18,12 +19,22 @@ my $INP = { checkbox       => 'checkbox',
             textfield      => 'text' };
 my $NUL = q();
 
+# Private functions
+my $_hash_merge = sub {
+   return { %{ $_[ 0 ] }, %{ $_[ 1 ] || {} } };
+};
+
+my $_hashify = sub {
+   return $_[ 0 ] ? ref $_[ 0 ] eq 'HASH' ? { %{ $_[ 0 ] } } : { @_ } : {};
+};
+
+# Public methods
 sub new {
-   my ($self, @args) = @_; my $class = ref $self || $self;
+   my ($self, @args) = @_; my $class = blessed $self || $self;
 
    my $attr = { content_type => 'application/xhtml+xml' };
 
-   return bless _hash_merge( $attr, _arg_list( @args ) ), $class;
+   return bless $_hash_merge->( $attr, $_hashify->( @args ) ), $class;
 }
 
 sub content_type {
@@ -41,7 +52,7 @@ sub is_xml {
 sub popup_menu {
    my ($self, @args) = @_; my $options;
 
-   my $args    = _arg_list( @args );
+   my $args    = $_hashify->( @args );
    my $classes = delete $args->{classes} || {};
    my $def     = delete $args->{default} || $NUL;
    my $labels  = delete $args->{labels } || {};
@@ -69,7 +80,7 @@ sub popup_menu {
 sub radio_group {
    my ($self, @args) = @_;
 
-   my $args        = _arg_list( @args );
+   my $args        = $_hashify->( @args );
    my $cols        = $args->{columns    } || '999999';
    my $def         = $args->{default    } || 0;
    my $labels      = $args->{labels     } || {};
@@ -105,7 +116,7 @@ sub radio_group {
 }
 
 sub scrolling_list {
-   my ($self, @args) = @_; my $args = _arg_list( @args );
+   my ($self, @args) = @_; my $args = $_hashify->( @args );
 
    $args->{multiple} = 'multiple';
    return $self->popup_menu( $args );
@@ -142,21 +153,21 @@ sub AUTOLOAD { ## no critic
 
 sub DESTROY {}
 
-# Private subroutines
-
-sub _arg_list {
-   return $_[ 0 ] ? ref $_[ 0 ] eq 'HASH' ? { %{ $_[ 0 ] } } : { @_ } : {};
-}
-
-sub _hash_merge {
-   return { %{ $_[ 0 ] }, %{ $_[ 1 ] || {} } };
-}
-
 1;
 
 __END__
 
 =pod
+
+=encoding utf8
+
+=begin html
+
+<a href="https://travis-ci.org/pjfl/p5-html-accessors"><img src="https://travis-ci.org/pjfl/p5-html-accessors.svg?branch=master" alt="Travis CI Badge"></a>
+<a href="http://badge.fury.io/pl/HTML-Accessors"><img src="https://badge.fury.io/pl/HTML-Accessors.svg" alt="CPAN Badge"></a>
+<a href="http://cpants.cpanauthors.org/dist/HTML-Accessors"><img src="http://cpants.cpanauthors.org/dist/HTML-Accessors.png" alt="Kwalitee Badge"></a>
+
+=end html
 
 =head1 Name
 
@@ -164,16 +175,16 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Version
 
-Describes version v0.12.$Rev: 2 $ of L<HTML::Accessors>
+Describes version v0.12.$Rev: 3 $ of L<HTML::Accessors>
 
 =head1 Synopsis
 
    use HTML::Accessors;
 
-   my $my_obj = HTML::Accessors->new();
+   my $hacc = HTML::Accessors->new();
 
    # Create an anchor element
-   $anchor = $my_obj->a( { href => 'http://...' }, 'This is a link' );
+   $anchor = $hacc->a( { href => 'http://...' }, 'This is a link' );
 
 =head1 Description
 
@@ -183,7 +194,7 @@ from L<CGI>. Using the L<CGI> module is undesirable in a L<Catalyst>
 application (run from the development server) due go greediness issues
 over STDIN.
 
-The returned tags are either XHTML 1.1 or HTML 4.01 compliant.
+The returned tags are either XHTML 1.1 or HTML 5 compliant.
 
 =head1 Configuration and Environment
 
@@ -203,32 +214,32 @@ generate HTML compatible tags instead
 
 =head2 new
 
-   my $my_obj = HTML::Accessors->new( content_type => q(application/xhtml+xml) );
+   my $hacc = HTML::Accessors->new( content_type => 'application/xhtml+xml' );
 
-Uses L</_arg_list> to process the passed options
+Uses C<_hashify> to process the passed options
 
 =head2 content_type
 
-   $content_type = $self->content_type( $new_type );
+   $content_type = $hacc->content_type( $new_type );
 
 Accessor / mutator for the C<content_type> attribute
 
 =head2 escape_html
 
-   my $escaped_html = $my_obj->escape_html( $unescaped_html );
+   my $escaped_html = $hacc->escape_html( $unescaped_html );
 
 Expose the method L<escape_html|HTML::GenerateUtil/FUNCTIONS>
 
 =head2 is_xml
 
-   my $bool = $my_obj->is_xml;
+   my $bool = $hacc->is_xml;
 
 Returns true if the returned tags will be XHTML. Matches the string I<.xml>
 at the end of the I<content_type>
 
 =head2 popup_menu
 
-   my $html = $my_obj->popup_menu( default => $value, labels => {}, values => [] );
+   my $html = $hacc->popup_menu( default => $value, labels => {}, values => [] );
 
 Returns the C<< <select> >> element. The first option passed to
 C<popup_menu> is either a hash ref or a list of key/value pairs. The keys are:
@@ -260,8 +271,8 @@ options returned in the body of the C<< <select> >> element
 The rest of the keys and values are passed as attributes to the
 C<< <select> >> element. For example:
 
-   $ref = { default => 1, name => q(my_field), values => [ 1, 2 ] };
-   $my_obj->popup_menu( $ref );
+   $ref = { default => 1, name => 'my_field', values => [ 1, 2 ] };
+   $hacc->popup_menu( $ref );
 
 would return:
 
@@ -323,7 +334,7 @@ For example:
                          4 => q(Button Four), },
             name    => q(my_field),
             values  => [ 1, 2, 3, 4 ] };
-   $my_obj->radio_group( $ref );
+   $hacc->radio_group( $ref );
 
 would return:
 
@@ -363,7 +374,7 @@ If the requested element exists in the hard coded list of input
 elements, then the element is set to C<input> and the mapped value
 used as the type attribute in the call to C<generate_tag>. For example;
 
-   $my_obj->textfield( { default => q(default value), name => q(my_field) } );
+   $hacc->textfield( { default => 'default value', name => 'my_field' } );
 
 would return
 
@@ -380,16 +391,16 @@ L<elements|HTML::Tagset/isKnown>
 Implement the C<DESTROY> method so that the C<AUTOLOAD> method doesn't get
 called instead
 
-=head2 _arg_list
+=head2 _hash_merge
+
+Simplistic merging of two hashes
+
+=head2 _hashify
 
 Returns a hash ref containing the passed parameter list. Enables
 methods to be called with either a list or a hash ref as it's input
 parameters. Makes copies as it goes so that you can change the contents
 without altering the parameters if they were passed by reference
-
-=head2 _hash_merge
-
-Simplistic merging of two hashes
 
 =head1 Diagnostics
 
@@ -413,9 +424,12 @@ There are no known incompatibilities in this module
 
 =head1 Bugs and Limitations
 
-There are no known bugs in this module.
-Please report problems to the address below.
-Patches are welcome
+There are no known bugs in this module. Please report problems to
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-Accessors.  Patches are welcome
+
+=head1 Acknowledgements
+
+Larry Wall - For the Perl programming language
 
 =head1 Author
 
@@ -427,7 +441,7 @@ Larry Wall - For the Perl programming language
 
 =head1 License and Copyright
 
-Copyright (c) 2013 Peter Flanigan. All rights reserved.
+Copyright (c) 2015 Peter Flanigan. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself. See L<perlartistic>.
