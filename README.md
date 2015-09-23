@@ -10,7 +10,7 @@ HTML::Accessors - Generate HTML elements
 
 # Version
 
-Describes version v0.13.$Rev: 1 $ of [HTML::Accessors](https://metacpan.org/pod/HTML::Accessors)
+Describes version v0.13.$Rev: 3 $ of [HTML::Accessors](https://metacpan.org/pod/HTML::Accessors)
 
 # Synopsis
 

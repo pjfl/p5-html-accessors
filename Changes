@@ -1,5 +1,6 @@
 Revision history for HTML::Accessors
 
+          - Containerised builds for Travis CI
           - Toolchain update
 
 0.13.1    2015-05-20 10:34:33
