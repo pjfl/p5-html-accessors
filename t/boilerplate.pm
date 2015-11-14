@@ -6,10 +6,12 @@ use File::Spec::Functions qw( catdir updir );
 use FindBin               qw( $Bin );
 use lib               catdir( $Bin, updir, 'lib' ), catdir( $Bin, 'lib' );
 
-use Test::More;
-use Test::Requires { version => 0.88 };
 use Module::Build;
 use Sys::Hostname;
+
+sub plan (;@) {
+   $_[ 0 ] eq 'skip_all' and print '1..0 # SKIP '.$_[ 1 ]."\n" and exit 0;
+}
 
 my ($builder, $host, $notes, $perl_ver);
 
@@ -19,12 +21,18 @@ BEGIN {
    $notes    = $builder ? $builder->notes : {};
    $perl_ver = $notes->{min_perl_version} || 5.008;
 
+   eval { require Test::Requires }; $@ and plan skip_all => 'No Test::Requires';
+
+   $Bin =~ m{ : .+ : }mx and plan skip_all => 'Two colons in $Bin path';
+
    if ($notes->{testing}) {
-      $Bin =~ m{ : .+ : }mx and plan skip_all => 'Two colons in $Bin path';
+      $host eq 'cpantest.antelope.net' and plan skip_all =>
+         'Broken smoker 0a2fcf86-8a1d-11e5-ae6c-05e5e19420dd';
    }
 }
 
 use Test::Requires "${perl_ver}";
+use Test::Requires { version => 0.88 };
 
 sub import {
    strict->import;
