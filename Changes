@@ -1,5 +1,6 @@
 Revision history for HTML::Accessors
 
+          - Refactored smoker exceptions to dump file
           - Another broken smoker added to exception list
           - Containerised builds for Travis CI
           - Toolchain update
