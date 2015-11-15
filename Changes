@@ -1,5 +1,6 @@
 Revision history for HTML::Accessors
 
+0.14.1    2015-11-15 23:00:34
           - Refactored smoker exceptions to dump file
           - Another broken smoker added to exception list
           - Containerised builds for Travis CI
