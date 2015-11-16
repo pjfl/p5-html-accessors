@@ -3,7 +3,7 @@ package HTML::Accessors;
 use 5.01;
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.14.%d', q$Rev: 1 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.14.%d', q$Rev: 2 $ =~ /\d+/gmx );
 
 use Carp;
 use HTML::GenerateUtil qw( generate_tag :consts );
@@ -175,7 +175,7 @@ HTML::Accessors - Generate HTML elements
 
 =head1 Version
 
-Describes version v0.14.$Rev: 1 $ of L<HTML::Accessors>
+Describes version v0.14.$Rev: 2 $ of L<HTML::Accessors>
 
 =head1 Synopsis
 
