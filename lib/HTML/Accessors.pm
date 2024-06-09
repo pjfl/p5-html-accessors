@@ -21,7 +21,7 @@ my $NUL = q();
 
 # Private functions
 my $_hash_merge = sub {
-   return { %{ $_[ 0 ] }, %{ $_[ 1 ] || {} } };
+   return { %{ $_[ 0 ] }, %{ $_[ 1 ] // {} } };
 };
 
 my $_hashify = sub {
